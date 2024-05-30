@@ -1,10 +1,32 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { tap } from 'rxjs';
 import { LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 
+export interface Hostel {
+  "id":number,
+  "name":string,
+  "type":string,
+  "contact":string,
+  "isActive":boolean,
+  'rooms': number,
+  'address': String,
+  'owner': String
+}
+
+export interface Tenant {
+  "id" : number,
+  "firstName": string,
+  "middleName": string,
+  "lastName": string,
+  "mobile": string,
+  "idType": string,
+  "idProof": string,
+  "entryDate": String,
+  "exitDate": String,
+  "isActive": boolean
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -13,62 +35,42 @@ import { LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 })
 export class DashboardComponent {
 
+  ngOnInit() {
+    if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
+      this.router.navigate(['login']);
+    }
+  }
+
   constructor(
     private router: Router,
     public authService: AuthService,
   ) {}
 
-  logout() {
-    // Removes the jwt token from the local storage, so the user gets logged out & then navigate back to the "public" routes
-   // this.router.navigate(['../../']);
-  this.authService.logout().pipe(
-    tap(() => this.router.navigate(['login']))
-  ).subscribe();
-  }
-
-  sites = [
+  hostels : Hostel[]= [
     {
-      "site":"Kamalapuram",
-      "engineer":"Samba",
-      "company":"SAND",
-      "contact":"9502251950"
-    },
-    {
-      "site":"Siddavatam",
-      "engineer":"Ayyawar Reddy",
-      "company":"SAND",
-      "contact":"9502342250"
-    },
-    {
-      "site":"Pushpagiri",
-      "engineer":"Pardhu",
-      "company":"SAND",
-      "contact":"1234567786"
-    },
-    {
-      "site":"Chennur",
-      "engineer":"Shivareddy",
-      "company":"SAND",
-      "contact":"9502242350"
+      "id":1234,
+      "name":"Sri Balaji PG",
+      "type":"Mens",
+      "contact":"+91 - 8712278483",
+      "isActive":true,
+      "rooms": 30,
+      "address": "Nushif Mansion, Rahmat Gulshan Colony, PJR Nagar, Gachibowli, Hyderabad, Telangana, India - 500032",
+      "owner": "Subbareddy Nallamachu"
     }
-  ]
+  ];
 
-  equipments = [
+  tenants: Tenant[] = [
     {
-      "brand":"XCMG",
-      "chasis":"42342",
-      "engine":"232223",
-      "model":"2022",
-      "type":"Excavator",
-      "hp":"210"
-    },
-    {
-      "brand":"HYUNDAI",
-      "chasis":"453543",
-      "engine":"3453453",
-      "model":"2017",
-      "type":"Excavator",
-      "hp":"140"
+      "id" : 12345,
+      "firstName": "Subbareddy",
+      "middleName": "",
+      "lastName": "Nallamachu",
+      "mobile": "+91-8712278483",
+      "idType": "Aadhaar",
+      "idProof": "534963122407",
+      "entryDate": "2024-04-01",
+      "exitDate": "",
+      "isActive": true
     }
   ]
 

@@ -1,50 +1,39 @@
-<mat-tab-group dynamicHeight>
-    <mat-tab label="Active Hostels">
-        <ng-template matTabContent>
-            <table mat-table [dataSource]="getActiveHostels()" class="mat-elevation-z8 data-table">
-                <ng-container matColumnDef="site">
-                    <th mat-header-cell *matHeaderCellDef> Site </th>
-                    <td mat-cell *matCellDef="let site"> {{site.site}} </td>
-                </ng-container>
-                <ng-container matColumnDef="engineer">
-                    <th mat-header-cell *matHeaderCellDef> Engineer </th>
-                    <td mat-cell *matCellDef="let site"> {{site.engineer}} </td>
-                </ng-container>
-                <ng-container matColumnDef="company">
-                    <th mat-header-cell *matHeaderCellDef> Company </th>
-                    <td mat-cell *matCellDef="let site"> {{site.company}} </td>
-                </ng-container>
-                <ng-container matColumnDef="contact">
-                    <th mat-header-cell *matHeaderCellDef> Contact </th>
-                    <td mat-cell *matCellDef="let site"> {{site.contact}} </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </ng-template>
-    </mat-tab>
-    <mat-tab label="All Hostels">
-        <ng-template matTabContent>
-            <table mat-table [dataSource]="getAllHostels()" class="mat-elevation-z8 demo-table">
-                <ng-container matColumnDef="site">
-                    <th mat-header-cell *matHeaderCellDef> Site </th>
-                    <td mat-cell *matCellDef="let site"> {{site.site}} </td>
-                </ng-container>
-                <ng-container matColumnDef="engineer">
-                    <th mat-header-cell *matHeaderCellDef> Engineer </th>
-                    <td mat-cell *matCellDef="let site"> {{site.engineer}} </td>
-                </ng-container>
-                <ng-container matColumnDef="company">
-                    <th mat-header-cell *matHeaderCellDef> Company </th>
-                    <td mat-cell *matCellDef="let site"> {{site.company}} </td>
-                </ng-container>
-                <ng-container matColumnDef="contact">
-                    <th mat-header-cell *matHeaderCellDef> Contact </th>
-                    <td mat-cell *matCellDef="let site"> {{site.contact}} </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </ng-template>
-    </mat-tab>
-</mat-tab-group>
+<div>
+    <h2>Hostel:</h2>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 data-table">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> Id </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Type </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.type}} </td>
+        </ng-container>
+        <ng-container matColumnDef="noOfRooms">
+            <th mat-header-cell *matHeaderCellDef> No Of Rooms </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.rooms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="owner">
+            <th mat-header-cell *matHeaderCellDef> Owner Name </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.owner}} </td>
+        </ng-container>
+        <ng-container matColumnDef="contact">
+            <th mat-header-cell *matHeaderCellDef> Contact </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.contact}} </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef> Address </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.address}} </td>
+        </ng-container>
+        <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef> Active </th>
+            <td mat-cell *matCellDef="let hostel"> {{(hostel.isActive)?"YES":"NO"}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

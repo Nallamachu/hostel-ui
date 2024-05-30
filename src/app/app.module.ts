@@ -20,6 +20,7 @@ import { RegisterComponent } from './public/components/register/register.compone
 import { JwtModule } from '@auth0/angular-jwt';
 import { FooterComponent } from './public/components/footer/footer.component';
 import { LOCALSTORAGE_TOKEN_KEY } from './constants';
+import { AddressComponent } from './public/components/address/address.component';
 
 
 // specify tokenGetter for the angular jwt package
@@ -29,7 +30,7 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
-    AppComponent, HeaderComponent, LoginComponent, RegisterComponent, FooterComponent
+    AppComponent, HeaderComponent, LoginComponent, RegisterComponent, FooterComponent, AddressComponent
   ],
   imports: [
     AppRoutingModule,

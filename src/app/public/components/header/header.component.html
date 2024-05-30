@@ -2,13 +2,13 @@
   <div class="toolbar">
     <span>{{appName}}</span>
     <span class="spacer"></span>
-    <button mat-button *ngIf="!isAuthenticated" routerLink="login">Login</button>
-    <button mat-button *ngIf="!isAuthenticated" routerLink="register">Register</button>
-    <button mat-button *ngIf="isAuthenticated" routerLink="dashboard">Dashboard</button>
-    <button mat-button *ngIf="isAuthenticated" routerLink="hostel">Hostel</button>
-    <button mat-button *ngIf="isAuthenticated" routerLink="room">Room</button>
-    <button mat-button *ngIf="isAuthenticated" routerLink="tenant">Tenant</button>
-    <button mat-button *ngIf="isAuthenticated" routerLink="expense">Expense</button>
-    <button mat-button *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+    <button mat-button *ngIf="!isAuthenticated()" routerLink="login">Login</button>
+    <button mat-button *ngIf="!isAuthenticated()" routerLink="register">Register</button>
+    <button mat-button *ngIf="isAuthenticated()" routerLink="dashboard">Dashboard</button>
+    <button mat-button *ngIf="isAuthenticated()" routerLink="hostel">Hostel</button>
+    <button mat-button *ngIf="isAuthenticated()" routerLink="room">Room</button>
+    <button mat-button *ngIf="isAuthenticated()" routerLink="tenant">Tenant</button>
+    <button mat-button *ngIf="isAuthenticated()" routerLink="expense">Expense</button>
+    <button mat-button *ngIf="isAuthenticated()" (click)="logout()">Logout</button>
   </div>
 </div>

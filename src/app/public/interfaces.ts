@@ -32,10 +32,20 @@ Interface for the Register Request (can look different, based on your backend ap
 */
 export interface RegisterRequest {
   email: string;
-  username: string;
   firstname: string;
   lastname: string;
   password: string;
+  mobile: string;
+  referralCode: string;
+  referredByCode: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    zipcode: number;
+  };
+  role: string;
 }
 
 /*
@@ -45,3 +55,4 @@ export interface RegisterResponse {
   status: number;
   message: string;
 }
+

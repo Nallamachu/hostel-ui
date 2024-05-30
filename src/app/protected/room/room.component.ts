@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 
 export interface Room {
   "brand":string,
@@ -18,8 +20,16 @@ export interface Room {
 export class RoomComponent {
 
   ngOnInit() {
-    this.getAllRooms();
+    if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
+      this.router.navigate(['login']);
+    } else {
+      this.getAllRooms();
+    }
   }
+
+  constructor(
+    private router: Router
+  ) {}
 
   rooms: Room[] = [
     {

@@ -11,24 +11,27 @@ import { APP_NAME } from 'src/app/constants';
 })
 
 export class HeaderComponent {
-  isAuthenticated: boolean = false;
+  authenticated!: boolean;
   appName: string = APP_NAME;
   constructor(private router: Router, public authService: AuthService) {
-    authService.loginStatusChange().subscribe(loggedIn => {
-      this.isAuthenticated = loggedIn
+    
+  }
+
+  ngOnInit() {
+    this.authService.loginStatusChange().subscribe(loggedIn => {
+      this.authenticated = loggedIn
     });
   }
 
+  isAuthenticated() {
+    return this.authenticated;
+  }
+
   logout() {
-    // Removes the jwt token from the local storage, so the user gets logged out & then navigate back to the "public" routes
-   // this.router.navigate(['../../']);
    localStorage.clear();
     this.authService.logout().pipe(
       tap(() => this.router.navigate(['login']))
     ).subscribe();
   }
 
-  isLoggedIn() {
-    
-  }
 }

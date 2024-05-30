@@ -1,11 +1,12 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, of, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from '../../interfaces';
-import { LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
+import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
+import { environment } from 'src/environments/environment';
 
 export const fakeLoginResponse: LoginResponse = {
   accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
@@ -24,7 +25,6 @@ export const fakeRegisterResponse: RegisterResponse = {
   message: 'Registration sucessfull.'
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -36,62 +36,55 @@ export class AuthService {
     private jwtService: JwtHelperService
   ) { }
 
-  private   loggedIn: Subject<boolean> = new ReplaySubject<boolean>(1);
+  private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  /*
-   Due to the '/api' the url will be rewritten by the proxy, e.g. to http://localhost:8080/api/auth/login
-   this is specified in the src/proxy.conf.json
-   the proxy.conf.json listens for /api and changes the target. You can also change this in the proxy.conf.json
-
-   The `..of()..` can be removed if you have a real backend, at the moment, this is just a faked response
-  */
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return of(fakeLoginResponse).pipe(
-      tap((res: LoginResponse) => localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken)),
-      tap(() => this.loggedIn.next(true)),
+    // return of(fakeLoginResponse).pipe(
+    //   tap((res: LoginResponse) => localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken)),
+    //   tap(() => this.loggedIn.next(true)),
+    //   tap(() => this.snackbar.open('Login Successfull', 'Close', {
+    //     duration: 2000, horizontalPosition: 'right', verticalPosition: 'bottom'
+    //   }))
+    // );
+
+    return this.http.post<LoginResponse>(environment.API_URL + '/api/v1/auth/authenticate', loginRequest).pipe(
+      tap((res: LoginResponse) => {
+        localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken),
+          localStorage.setItem(LOCALSTORAGE_CURRENT_USER, String(res.refreshToken.id))
+        this.loggedIn.next(true)
+      }),
       tap(() => this.snackbar.open('Login Successfull', 'Close', {
-        duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
+        duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
       }))
     );
-    // return this.http.post<LoginResponse>('/api/auth/login', loginRequest).pipe(
-    // tap((res: LoginResponse) => localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken)),
-    // tap(() => this.snackbar.open('Login Successfull', 'Close', {
-    //  duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
-    // }))
-    // );
+  }
+
+  get isLoggedIn() {
+    return this.loggedIn;
   }
 
   logout(): Observable<LoginResponse> {
     return of(fakeLoginResponse).pipe(
-      tap((res: LoginResponse) => localStorage.removeItem(LOCALSTORAGE_TOKEN_KEY)),
+      tap((res: LoginResponse) => localStorage.clear()),
       tap(() => this.loggedIn.next(false)),
       tap(() => this.snackbar.open('Logout Successfull', 'Close', {
-        duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
+        duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
       }))
     );
-    // return this.http.post<LoginResponse>('/api/auth/login', loginRequest).pipe(
-    // tap((res: LoginResponse) => localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken)),
-    // tap(() => this.snackbar.open('Login Successfull', 'Close', {
-    //  duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
-    // }))
-    // );
   }
 
-  /*
-   The `..of()..` can be removed if you have a real backend, at the moment, this is just a faked response
-  */
   register(registerRequest: RegisterRequest): Observable<RegisterResponse> {
     // TODO
-    return of(fakeRegisterResponse).pipe(
+    // return of(fakeRegisterResponse).pipe(
+    //   tap((res: RegisterResponse) => this.snackbar.open(`User created successfully`, 'Close', {
+    //     duration: 2000, horizontalPosition: 'right', verticalPosition: 'bottom'
+    //   })),
+    // );
+    return this.http.post<RegisterResponse>(environment.API_URL + '/api/v1/auth/register', registerRequest).pipe(
       tap((res: RegisterResponse) => this.snackbar.open(`User created successfully`, 'Close', {
-        duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
-      })),
-    );
-    // return this.http.post<RegisterResponse>('/api/auth/register', registerRequest).pipe(
-    // tap((res: RegisterResponse) => this.snackbar.open(`User created successfully`, 'Close', {
-    //  duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
-    // }))
-    // )
+        duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+      }))
+    )
   }
 
   /*
@@ -104,7 +97,6 @@ export class AuthService {
 
   loginStatusChange(): Observable<boolean> {
     return this.loggedIn.asObservable();
-    //return localStorage.getItem(LOCALSTORAGE_TOKEN_KEY)!=undefined?of(true):of(false);
   }
 
   isAuthenticated(){

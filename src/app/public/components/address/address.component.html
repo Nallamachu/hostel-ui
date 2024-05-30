@@ -1,0 +1,35 @@
+<mat-card-title>Address</mat-card-title>
+<mat-card-content class="mat-card-content">
+    <form [formGroup]="addressForm">
+        <mat-form-field class="mat-form-field">
+            <input type="text" matInput placeholder="Street" formControlName="street">
+            <mat-error
+                *ngIf="this.addressForm.get('street')?.touched && this.addressForm.get('street')?.hasError('required')">
+                Street is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field">
+            <input type="text" matInput placeholder="City" formControlName="city">
+            <mat-error
+                *ngIf="this.addressForm.get('city')?.touched && this.addressForm.get('city')?.hasError('required')">
+                City is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field">
+            <input type="text" matInput placeholder="State" formControlName="state">
+            <mat-error
+                *ngIf="this.addressForm.get('state')?.touched && this.addressForm.get('state')?.hasError('required')">
+                State is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field">
+            <input type="text" matInput placeholder="Country" formControlName="country">
+            <mat-error
+                *ngIf="this.addressForm.get('country')?.touched && this.addressForm.get('country')?.hasError('required')">
+                Country is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field">
+            <input type="text" matInput placeholder="Pincode" formControlName="zipcode">
+            <mat-error
+                *ngIf="this.addressForm.get('zipcode')?.touched && this.addressForm.get('zipcode')?.hasError('required')">
+                Pincode is required</mat-error>
+        </mat-form-field>
+    </form>
+</mat-card-content>

@@ -1,10 +1,9 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CustomValidators } from '../../custom-validator';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { NonNullAssert } from '@angular/compiler';
 
 @Component({
   selector: 'app-register',
@@ -13,21 +12,25 @@ import { NonNullAssert } from '@angular/compiler';
 })
 export class RegisterComponent {
 
-  public registerForm : FormGroup;
+  public registerForm: FormGroup;
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {
-    this.registerForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      username: new FormControl(null, [Validators.required]),
-      firstname: new FormControl(null, [Validators.required]),
-      lastname: new FormControl(null, [Validators.required]),
-      password: new FormControl(null, [Validators.required]),
-      passwordConfirm: new FormControl(null, [Validators.required])
-    },
-      { validators: CustomValidators.passwordsMatching }
+    this.registerForm = new FormGroup(
+      {
+        email: new FormControl(null, [Validators.required, Validators.email]),
+        firstname: new FormControl(null, [Validators.required]),
+        lastname: new FormControl(null, [Validators.required]),
+        password: new FormControl(null, [Validators.required]),
+        passwordConfirm: new FormControl(null, [Validators.required]),
+        mobile: new FormControl(null, [Validators.required]),
+        referredByCode: new FormControl(null, [])
+      },
+      {
+        validators: CustomValidators.passwordsMatching
+      }
     )
   }
 
