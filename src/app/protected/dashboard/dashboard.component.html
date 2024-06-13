@@ -9,10 +9,10 @@
           <mat-card-title>{{hostel.name.toUpperCase()}}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <p>Type:    {{hostel.type}}</p>
+            <p>Type: {{hostel.type}}</p>
             <p>Owner: {{hostel.owner}}</p>
             <p>Contact: {{hostel.contact}}</p>
-            <p>Total Rooms: {{(hostel.rooms>0)?hostel.rooms:0}}</p>
+            <p>Total Rooms: {{(hostel.rooms.length>0)?hostel.rooms.length:0}}</p>
             <p>Active: {{hostel.isActive===true?"YES":"NO"}}</p>
         </mat-card-content>
       </mat-card>

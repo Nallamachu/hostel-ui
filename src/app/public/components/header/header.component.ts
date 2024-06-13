@@ -24,6 +24,9 @@ export class HeaderComponent {
   }
 
   isAuthenticated() {
+    this.authService.loginStatusChange().subscribe(loggedIn => {
+      this.authenticated = loggedIn
+    });
     return this.authenticated;
   }
 

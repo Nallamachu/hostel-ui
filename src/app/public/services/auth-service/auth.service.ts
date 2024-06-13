@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, of, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
@@ -7,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from '../../interfaces';
 import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 export const fakeLoginResponse: LoginResponse = {
   accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
@@ -33,20 +33,22 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private snackbar: MatSnackBar,
-    private jwtService: JwtHelperService
-  ) { }
+    private jwtService: JwtHelperService,
+    private router: Router
+  ) {
+    this.autoSignIn();
+   }
 
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    // return of(fakeLoginResponse).pipe(
-    //   tap((res: LoginResponse) => localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken)),
-    //   tap(() => this.loggedIn.next(true)),
-    //   tap(() => this.snackbar.open('Login Successfull', 'Close', {
-    //     duration: 2000, horizontalPosition: 'right', verticalPosition: 'bottom'
-    //   }))
-    // );
+  autoSignIn() {
+    if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY)) {
+        this.loggedIn.next(true);
+        this.router.navigate(['/dashboard']);
+    }
+  }
 
+  login(loginRequest: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(environment.API_URL + '/api/v1/auth/authenticate', loginRequest).pipe(
       tap((res: LoginResponse) => {
         localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken),
@@ -74,12 +76,6 @@ export class AuthService {
   }
 
   register(registerRequest: RegisterRequest): Observable<RegisterResponse> {
-    // TODO
-    // return of(fakeRegisterResponse).pipe(
-    //   tap((res: RegisterResponse) => this.snackbar.open(`User created successfully`, 'Close', {
-    //     duration: 2000, horizontalPosition: 'right', verticalPosition: 'bottom'
-    //   })),
-    // );
     return this.http.post<RegisterResponse>(environment.API_URL + '/api/v1/auth/register', registerRequest).pipe(
       tap((res: RegisterResponse) => this.snackbar.open(`User created successfully`, 'Close', {
         duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'

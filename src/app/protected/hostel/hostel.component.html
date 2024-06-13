@@ -13,9 +13,9 @@
             <th mat-header-cell *matHeaderCellDef> Type </th>
             <td mat-cell *matCellDef="let hostel"> {{hostel.type}} </td>
         </ng-container>
-        <ng-container matColumnDef="noOfRooms">
-            <th mat-header-cell *matHeaderCellDef> No Of Rooms </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.rooms}} </td>
+        <ng-container matColumnDef="rooms">
+            <th mat-header-cell *matHeaderCellDef> Rooms </th>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.rooms.length}} </td>
         </ng-container>
         <ng-container matColumnDef="owner">
             <th mat-header-cell *matHeaderCellDef> Owner Name </th>
@@ -27,7 +27,7 @@
         </ng-container>
         <ng-container matColumnDef="address">
             <th mat-header-cell *matHeaderCellDef> Address </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.address}} </td>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.address.street}},{{hostel.address.city}},{{hostel.address.state}},{{hostel.address.country}},{{hostel.address.zipcode}} </td>
         </ng-container>
         <ng-container matColumnDef="isActive">
             <th mat-header-cell *matHeaderCellDef> Active </th>

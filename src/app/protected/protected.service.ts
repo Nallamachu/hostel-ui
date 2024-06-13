@@ -18,10 +18,10 @@ export class ProtectedService {
   getHostels(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);
-    params = params.append('page', 1);
+    params = params.append('page', 0);
     params = params.append('size', 10);
-    params = params.append('sort', JSON.stringify(['id']));
-		return this.httpClient.get<Hostel[]>(url, {params: params});
+    params = params.append('sort', 'id');
+		return this.httpClient.get<Hostel[]>(url, {params: params});              
 	}
 
   async createHostel(url: string, hostel: Hostel) {

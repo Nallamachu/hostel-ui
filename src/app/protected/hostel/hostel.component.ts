@@ -13,9 +13,15 @@ export interface Hostel {
   "type":string,
   "contact":string,
   "isActive":boolean,
-  'rooms': number,
-  'address': String,
-  'owner': String
+  "rooms": [],
+  "address": {
+    "street": string,
+    "city": string,
+    "state": string,
+    "country": string,
+    "zipcode": Number
+  },
+  "owner": String
 }
 
 @Component({
@@ -51,34 +57,15 @@ export class HostelComponent implements AfterViewInit{
   dataSource = new MatTableDataSource<Hostel>();
 
   displayedColumns: string[] = ["id", "name", "type", "rooms", "owner", "contact", "isActive",  "address"];
-  activeHostels : Hostel[]= [];
-  allHostels : Hostel[]= [
-    {
-      "id":1234,
-      "name":"Sri Balaji PG",
-      "type":"Mens",
-      "contact":"+91 - 8712278483",
-      "isActive":true,
-      "rooms": 30,
-      "address": "Nushif Mansion, Rahmat Gulshan Colony, PJR Nagar, Gachibowli, Hyderabad, Telangana, India - 500032",
-      "owner": "Subbareddy Nallamachu"
-    }
-  ];
-
-  // getActiveHostels() {
-  //   this.activeSites = this.allSites.filter((site) => {
-  //     return site.isActive === true;
-  //   });
-  //   return this.activeSites;
-  // }
+  allHostels : Hostel[]= [];
 
   getHostels() {
     console.log(localStorage.getItem(LOCALSTORAGE_CURRENT_USER))
     var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER)!== null)? localStorage.getItem(LOCALSTORAGE_CURRENT_USER):"0");
-    console.log(userId);
 		let url = environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user';
 		const hostels = this.protectedService.getHostels(url, userId).subscribe(
 			(data) => {
+        console.log(data);
 				this.dataSource = new MatTableDataSource<Hostel>(data);
 				this.dataSource.paginator = this.paginator;
 			},

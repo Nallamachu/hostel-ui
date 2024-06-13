@@ -10,9 +10,15 @@ export interface Hostel {
   "type":string,
   "contact":string,
   "isActive":boolean,
-  'rooms': number,
-  'address': String,
-  'owner': String
+  "rooms": [],
+  "address": {
+    "street": string,
+    "city": string,
+    "state": string,
+    "country": string,
+    "zipcode": Number
+  },
+  "owner": String
 }
 
 export interface Tenant {
@@ -53,8 +59,14 @@ export class DashboardComponent {
       "type":"Mens",
       "contact":"+91 - 8712278483",
       "isActive":true,
-      "rooms": 30,
-      "address": "Nushif Mansion, Rahmat Gulshan Colony, PJR Nagar, Gachibowli, Hyderabad, Telangana, India - 500032",
+      "rooms": [],
+      "address": {
+        street:"Nushif Mansion, Rahmat Gulshan Colony, PJR Nagar, Gachibowli",
+        city: "Hyderabad", 
+        state:"Telangana", 
+        country: "India",
+        zipcode: 500032
+      },
       "owner": "Subbareddy Nallamachu"
     }
   ];
