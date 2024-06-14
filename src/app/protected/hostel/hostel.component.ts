@@ -105,6 +105,9 @@ export class HostelComponent implements AfterViewInit {
       },
       (error) => {
         console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
       }
     );
     return hostels;

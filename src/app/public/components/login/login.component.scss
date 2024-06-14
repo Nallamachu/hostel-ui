@@ -1,16 +1,10 @@
 :host {
   display: flex;
   justify-content: center;
-  margin: 100px 0px;
-}
-.input-container {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
+  position: fixed;
 }
 
 mat-card {
-  margin-top: -100px;
   max-width: 600px;
 
   mat-card-title,
