@@ -21,7 +21,7 @@ export class ProtectedService {
     params = params.append('page', 0);
     params = params.append('size', 10);
     params = params.append('sort', 'id');
-		return this.httpClient.get<Hostel[]>(url, {params: params});              
+		return this.httpClient.get<any>(url, {params: params});              
 	}
 
   async createHostel(url: string, hostel: Hostel) {

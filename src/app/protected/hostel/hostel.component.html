@@ -19,15 +19,15 @@
         </ng-container>
         <ng-container matColumnDef="owner">
             <th mat-header-cell *matHeaderCellDef> Owner Name </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.owner}} </td>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.owner.firstname}} {{hostel.owner.middlename}} {{hostel.owner.lastname}} </td>
         </ng-container>
         <ng-container matColumnDef="contact">
             <th mat-header-cell *matHeaderCellDef> Contact </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.contact}} </td>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.owner.mobile}} </td>
         </ng-container>
         <ng-container matColumnDef="address">
             <th mat-header-cell *matHeaderCellDef> Address </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.address.street}},{{hostel.address.city}},{{hostel.address.state}},{{hostel.address.country}},{{hostel.address.zipcode}} </td>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.address.street}}, {{hostel.address.city}}, {{hostel.address.state}}, {{hostel.address.country}}, {{hostel.address.zipcode}} </td>
         </ng-container>
         <ng-container matColumnDef="isActive">
             <th mat-header-cell *matHeaderCellDef> Active </th>
