@@ -57,8 +57,7 @@ export class HostelComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
-  @ViewChild(MatSort)
-  sorter!: MatSort;
+  //@ViewChild(MatSort)  sorter: MatSort = new MatSort;
 
   ngOnInit() {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined) {
@@ -75,7 +74,7 @@ export class HostelComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sorter;
+    //this.dataSource.sort = this.sorter;
   }
 
   protectedService = inject(ProtectedService);

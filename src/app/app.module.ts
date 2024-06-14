@@ -22,6 +22,9 @@ import { FooterComponent } from './public/components/footer/footer.component';
 import { LOCALSTORAGE_TOKEN_KEY } from './constants';
 import { AddressComponent } from './public/components/address/address.component';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 // specify tokenGetter for the angular jwt package
 export function tokenGetter() {
@@ -46,6 +49,8 @@ export function tokenGetter() {
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    MatTableModule,
+    MatPaginatorModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
