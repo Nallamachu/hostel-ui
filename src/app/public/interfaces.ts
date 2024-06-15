@@ -121,3 +121,12 @@ export interface Tenant {
   "room": Room,
   "payments": []
 }
+
+export interface Expense {
+  "id": number,
+  "expenseType": string,
+  "description": string,
+  "amount": number,
+  "date": string,
+  "hostel": Hostel
+}

@@ -48,6 +48,12 @@ export class ProtectedService {
 		return this.httpClient.get<any>(url, {params: params});              
 	}
 
+  getAllExpensesByUserId(url: string, userId: number) {
+    let params = new HttpParams();
+    params = params.append('userId', userId);
+		return this.httpClient.get<any>(url, {params: params});              
+	}
+
   async createHostel(url: string, hostel: Hostel) {
 		return await this.httpClient.post(environment.API_URL+ url, hostel).toPromise();
 	}
