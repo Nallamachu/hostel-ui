@@ -24,6 +24,12 @@ export class ProtectedService {
 		return this.httpClient.get<any>(url, {params: params});              
 	}
 
+  getAllHostelsByUser(url: string, userId: number) {
+    let params = new HttpParams();
+    params = params.append('userId', userId);
+		return this.httpClient.get<any>(url, {params: params});              
+	}
+
   getAllRoomsByUserId(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);

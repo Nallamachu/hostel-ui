@@ -2,7 +2,7 @@
 </div>
 <ng-template #content>
   <div>
-    <h2>Hostels</h2>
+    <h2 *ngIf="hostels.length > 0">Hostels</h2>
     <div *ngIf="hostels.length > 0">
       <mat-card class="flex-me" *ngFor="let hostel of hostels" >
         <mat-card-header>
@@ -10,27 +10,59 @@
         </mat-card-header>
         <mat-card-content>
             <p>Type: {{hostel.type}}</p>
-            <p>Owner: {{hostel.owner}}</p>
+            <p>Owner: {{hostel.owner.firstname}} {{hostel.owner.lastname}}</p>
             <p>Contact: {{hostel.contact}}</p>
             <p>Total Rooms: {{(hostel.rooms.length>0)?hostel.rooms.length:0}}</p>
             <p>Active: {{hostel.isActive===true?"YES":"NO"}}</p>
         </mat-card-content>
       </mat-card>
     </div>
-    <h2 style="margin-top: 20px;">Tenants:</h2>
+    <hr class="gradient">
+    <h2 style="margin-top: 20px;" *ngIf="rooms.length > 0">Rooms</h2>
+    <div *ngIf="rooms.length > 0">
+      <mat-card class="flex-me" *ngFor="let room of rooms" >
+        <mat-card-header>
+          <mat-card-title>{{room.roomNo}} - {{room.hostel.name}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>Id: {{room.id}}</p>
+            <p>Floor #: {{room.floorNo}}</p>
+            <p>Capacity: {{room.capacity}}</p>
+            <p>Hostel: {{room.hostel.name}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <hr class="gradient">
+    <h2 style="margin-top: 20px;" *ngIf="tenants.length > 0" >Tenants:</h2>
     <div *ngIf="tenants.length > 0" >
       <mat-card class="flex-me" *ngFor="let tenant of tenants">
         <mat-card-header>
-          <mat-card-title>{{tenant.firstName}} , {{tenant.lastName}}</mat-card-title>
+          <mat-card-title>{{tenant.firstName}}, {{tenant.lastName}}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <p>Tenant Id: {{tenant.id}}</p>
             <p>Mobile: {{tenant.mobile}}</p>
             <p>Id Type: {{tenant.idType}}</p>
-            <p>Id Number: {{tenant.idProof}}</p>
+            <p>Id Number: {{tenant.idNumber}}</p>
             <p>Entry Date: {{tenant.entryDate}}</p>
             <p>Exit Date: {{tenant.exitDate}}</p>
             <p>Active: {{(tenant.isActive)?"YES":"NO"}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <hr class="gradient">
+    <h2 style="margin-top: 20px;" *ngIf="expenses.length > 0" >Expenses:</h2>
+    <div *ngIf="expenses.length > 0" >
+      <mat-card class="flex-me" *ngFor="let expense of expenses">
+        <mat-card-header>
+          <mat-card-title>{{expense.hostel.name}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>Expense Id: {{expense.id}}</p>
+            <p>Expense Type: {{expense.expenseType}}</p>
+            <p>Description: {{expense.description}}</p>
+            <p>Date: {{expense.date}}</p>
+            <p>Amount: {{expense.amount}}</p>
         </mat-card-content>
       </mat-card>
     </div>

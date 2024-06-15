@@ -1,38 +1,12 @@
-import { Router } from '@angular/router';
-import { Component } from '@angular/core';
-
+import { Hostel, Tenant, Expense, Response, Room } from 'src/app/public/interfaces';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
-
-export interface Hostel {
-  "id":number,
-  "name":string,
-  "type":string,
-  "contact":string,
-  "isActive":boolean,
-  "rooms": [],
-  "address": {
-    "street": string,
-    "city": string,
-    "state": string,
-    "country": string,
-    "zipcode": Number
-  },
-  "owner": String
-}
-
-export interface Tenant {
-  "id" : number,
-  "firstName": string,
-  "middleName": string,
-  "lastName": string,
-  "mobile": string,
-  "idType": string,
-  "idProof": string,
-  "entryDate": String,
-  "exitDate": String,
-  "isActive": boolean
-}
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { LOCALSTORAGE_TOKEN_KEY, LOCALSTORAGE_CURRENT_USER } from 'src/app/constants';
+import { environment } from 'src/environments/environment'
+import { ProtectedService } from '../protected.service';
+import { tap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,50 +14,136 @@ export interface Tenant {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
+  protectedService = inject(ProtectedService);
 
   ngOnInit() {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
+    } else {
+      this.getAllHostels();
+      this.getAllRoomsByUserId();
+      this.getAllTenantsByUserId();
+      this.getAllExpensesByUserId();
     }
   }
 
   constructor(
     private router: Router,
     public authService: AuthService,
+    private snackbar: MatSnackBar
   ) {}
 
-  hostels : Hostel[]= [
-    {
-      "id":1234,
-      "name":"Sri Balaji PG",
-      "type":"Mens",
-      "contact":"+91 - 8712278483",
-      "isActive":true,
-      "rooms": [],
-      "address": {
-        street:"Nushif Mansion, Rahmat Gulshan Colony, PJR Nagar, Gachibowli",
-        city: "Hyderabad", 
-        state:"Telangana", 
-        country: "India",
-        zipcode: 500032
-      },
-      "owner": "Subbareddy Nallamachu"
-    }
-  ];
+  hostels : Hostel[]= [];
 
-  tenants: Tenant[] = [
-    {
-      "id" : 12345,
-      "firstName": "Subbareddy",
-      "middleName": "",
-      "lastName": "Nallamachu",
-      "mobile": "+91-8712278483",
-      "idType": "Aadhaar",
-      "idProof": "534963122407",
-      "entryDate": "2024-04-01",
-      "exitDate": "",
-      "isActive": true
-    }
-  ]
+  rooms: Room[] = [];
+
+  tenants: Tenant[] = []
+  
+  expenses: Expense[] = [];
+
+  response: Response = {
+    data: [],
+    error: []
+  }
+
+  getAllHostels() {
+    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
+    let url = environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user-no-pagination';
+    const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.hostels = this.response.data;
+          console.log(this.hostels);
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return hostels;
+  }
+
+  getAllRoomsByUserId() {
+    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
+    let url = environment.API_URL + '/api/v1/room/rooms-by-user-id';
+    const rooms = this.protectedService.getAllRoomsByUserId(url, userId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.rooms = this.response.data;
+          console.log(this.rooms);
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return rooms;
+  }
+
+  getAllTenantsByUserId() {
+    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
+    let url = environment.API_URL + '/api/v1/tenant/tenants-by-user-id';
+    const tenants = this.protectedService.getAllTenantsByUserId(url, userId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.tenants = this.response.data;
+          console.log(this.tenants);
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return tenants;
+  }
+
+  getAllExpensesByUserId() {
+    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
+    let url = environment.API_URL + '/api/v1/expense/find-all-expenses-by-user-id';
+    const expenses = this.protectedService.getAllExpensesByUserId(url, userId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.expenses = this.response.data;
+          console.log(this.expenses);
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return expenses;
+  }
 
 }
