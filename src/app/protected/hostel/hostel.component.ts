@@ -8,45 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-interface User {
-  firstname: string,
-  middlename: string,
-  lastname: string,
-  email: string,
-  username: string,
-  mobile: string,
-  referralCode: string,
-  referredByCode: string,
-  points: Number
-}
-
-export interface Hostel {
-  "id": number,
-  "name": string,
-  "type": string,
-  "contact": string,
-  "isActive": boolean,
-  "rooms": [],
-  "address": {
-    "street": string,
-    "city": string,
-    "state": string,
-    "country": string,
-    "zipcode": Number
-  },
-  "owner": User
-}
-
-interface Error {
-  code: string,
-  message: string
-}
-
-interface Response {
-  data: Hostel [],
-  error: Error []
-}
+import { Hostel, Response } from 'src/app/public/interfaces';
 
 @Component({
   selector: 'app-hostel',
@@ -80,7 +42,7 @@ export class HostelComponent implements AfterViewInit {
   protectedService = inject(ProtectedService);
   dataSource = new MatTableDataSource<Hostel>();
 
-  displayedColumns: string[] = ["id", "name", "type", "rooms", "owner", "contact", "isActive", "address"];
+  displayedColumns: string[] = ["id", "name", "type", "rooms", "owner", "contact", "isActive", "address", "actions"];
   allHostels: Hostel[] = [];
   response: Response = {
     data: [],
@@ -110,5 +72,9 @@ export class HostelComponent implements AfterViewInit {
       }
     );
     return hostels;
+  }
+
+  gotoRooms(_hostelId: any){
+      
   }
 }

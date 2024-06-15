@@ -56,3 +56,68 @@ export interface RegisterResponse {
   message: string;
 }
 
+
+export interface User {
+  firstname: string,
+  middlename: string,
+  lastname: string,
+  email: string,
+  username: string,
+  mobile: string,
+  referralCode: string,
+  referredByCode: string,
+  points: Number
+}
+
+export interface Address {
+  "street": string,
+  "city": string,
+  "state": string,
+  "country": string,
+  "zipcode": Number
+}
+
+export interface Hostel {
+  "id": number,
+  "name": string,
+  "type": string,
+  "contact": string,
+  "isActive": boolean,
+  "rooms": [],
+  "address": Address,
+  "owner": User
+}
+
+export interface Error {
+  code: string,
+  message: string
+}
+
+export interface Response {
+  data: any,
+  error: Error []
+}
+
+export interface Room {
+  "id": number,
+  "roomNo": number;
+  "floorNo": number;
+  "capacity": number;
+  "hostel": Hostel
+}
+
+export interface Tenant {
+  "id": number,
+  "firstName": string;
+  "middleName": string;
+  "lastName": string;
+  "mobile": string,
+  "idNumber": string,
+  "idType": string,
+  "entryDate": [],
+  "exitDate": [],
+  "isActive": boolean,
+  "address": Address,
+  "room": Room,
+  "payments": []
+}

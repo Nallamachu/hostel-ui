@@ -24,6 +24,7 @@ import { AddressComponent } from './public/components/address/address.component'
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CdkColumnDef } from '@angular/cdk/table';
 
 
 // specify tokenGetter for the angular jwt package
@@ -58,7 +59,7 @@ export function tokenGetter() {
       }
     })
   ],
-  providers: [],
+  providers:[CdkColumnDef],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

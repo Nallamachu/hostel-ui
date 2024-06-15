@@ -1,1 +1,60 @@
-<p>tenant works!</p>
+<div>
+    <h2>Tenants:</h2>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 data-table">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.id}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.firstName}} {{tenant.middleName}} {{tenant.lastName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="room">
+        <th mat-header-cell *matHeaderCellDef> Room No# </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.room.roomNo}} </td>
+      </ng-container>
+      <ng-container matColumnDef="mobile">
+        <th mat-header-cell *matHeaderCellDef> Mobile No# </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.mobile}} </td>
+      </ng-container>
+      <ng-container matColumnDef="idType">
+        <th mat-header-cell *matHeaderCellDef> Id Type </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.idType}} </td>
+      </ng-container>
+      <ng-container matColumnDef="idNumber">
+        <th mat-header-cell *matHeaderCellDef> Id Number# </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.idNumber}} </td>
+      </ng-container>
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.address.street}},{{tenant.address.city}}, {{tenant.address.state}},{{tenant.address.country}}, {{tenant.address.zipcode}} </td>
+      </ng-container>
+      <ng-container matColumnDef="entryDate">
+        <th mat-header-cell *matHeaderCellDef> Entry Date </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.entryDate}} </td>
+      </ng-container>
+      <ng-container matColumnDef="exitDate">
+        <th mat-header-cell *matHeaderCellDef> Exit Date </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.exitDate}} </td>
+      </ng-container>
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef> Active </th>
+        <td mat-cell *matCellDef="let tenant"> {{tenant.isActive}} </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let tenant">
+            <mat-icon aria-hidden="false" aria-label="Example person icon" fontIcon="person" 
+              alt="Go To Tenants" (click)=gotoTenantDetails(tenant.id)></mat-icon>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic hostels">
+      </mat-paginator>
+  </div>

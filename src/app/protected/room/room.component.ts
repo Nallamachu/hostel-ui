@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
-
-export interface Room {
-  "brand":string,
-  "chasis":string,
-  "engine":string,
-  "model":string,
-  "type":string,
-  "hp":string
-}
+import { tap } from 'rxjs';
+import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
+import { Room, Response } from 'src/app/public/interfaces';
+import { environment } from 'src/environments/environment';
+import { ProtectedService } from '../protected.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-room',
@@ -18,41 +16,84 @@ export interface Room {
 })
 
 export class RoomComponent {
+  protectedService = inject(ProtectedService);
+  dataSource = new MatTableDataSource<Room>();
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
   ngOnInit() {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
-      this.getAllRooms();
+      this.getAllRoomsByUserId();
     }
   }
 
   constructor(
-    private router: Router
+    private router: Router,
+    private snackbar: MatSnackBar,
   ) {}
 
-  rooms: Room[] = [
-    {
-      "brand":"XCMG",
-      "chasis":"42342",
-      "engine":"232223",
-      "model":"2022",
-      "type":"Excavator",
-      "hp":"210"
-    },
-    {
-      "brand":"HYUNDAI",
-      "chasis":"453543",
-      "engine":"3453453",
-      "model":"2017",
-      "type":"Excavator",
-      "hp":"140"
-    }
-  ]
+  response: Response = {
+    data: [],
+    error: []
+  };
+  
+  rooms: Room[] = []
 
-  displayedColumns = ["brand", "chasis", "engine", "model", "type", "hp"];
+  displayedColumns = ["id", "roomNo", "floorNo", "capacity", "hostel", "actions"];
 
-  getAllRooms() {
-    return this.rooms;
+  getAllRoomsByHostelId(hostelId: any) {
+    let url = environment.API_URL + '/api/v1/room/rooms-by-hostel-id';
+    const rooms = this.protectedService.getAllRoomsByHostelId(url, hostelId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.dataSource = new MatTableDataSource<Room>(this.response.data);
+          this.dataSource.paginator = this.paginator;
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return rooms;
+  }
+
+  getAllRoomsByUserId() {
+    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
+    let url = environment.API_URL + '/api/v1/room/rooms-by-user-id';
+    const rooms = this.protectedService.getAllRoomsByUserId(url, userId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.dataSource = new MatTableDataSource<Room>(this.response.data);
+          this.dataSource.paginator = this.paginator;
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return rooms;
+  }
+
+  gotoTenants(roomId:any) {
+    console.log(roomId)
   }
 }

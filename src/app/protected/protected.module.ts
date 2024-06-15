@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
 import { TenantComponent } from './tenant/tenant.component';
 import { ExpenseComponent } from './expense/expense.component';
 
@@ -29,7 +30,8 @@ import { ExpenseComponent } from './expense/expense.component';
     MatCardModule,
     MatTabsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatIconModule
   ]
 })
 export class ProtectedModule { }

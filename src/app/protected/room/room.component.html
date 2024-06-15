@@ -1,31 +1,40 @@
 <div>
   <h2>Rooms:</h2>
-  <table mat-table [dataSource]="getAllRooms()" class="mat-elevation-z8 data-table">
-    <ng-container matColumnDef="brand">
-      <th mat-header-cell *matHeaderCellDef> Brand </th>
-      <td mat-cell *matCellDef="let equipment"> {{equipment.brand}} </td>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 data-table">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let room"> {{room.id}} </td>
     </ng-container>
-    <ng-container matColumnDef="chasis">
-      <th mat-header-cell *matHeaderCellDef> Chasis# </th>
-      <td mat-cell *matCellDef="let equipment"> {{equipment.chasis}} </td>
+    <ng-container matColumnDef="roomNo">
+      <th mat-header-cell *matHeaderCellDef> Room No# </th>
+      <td mat-cell *matCellDef="let room"> {{room.roomNo}} </td>
     </ng-container>
-    <ng-container matColumnDef="engine">
-      <th mat-header-cell *matHeaderCellDef> Engine# </th>
-      <td mat-cell *matCellDef="let equipment"> {{equipment.engine}} </td>
+    <ng-container matColumnDef="floorNo">
+      <th mat-header-cell *matHeaderCellDef> Floor No# </th>
+      <td mat-cell *matCellDef="let room"> {{room.floorNo}} </td>
     </ng-container>
-    <ng-container matColumnDef="model">
-      <th mat-header-cell *matHeaderCellDef> Model </th>
-      <td mat-cell *matCellDef="let equipment"> {{equipment.model}} </td>
+    <ng-container matColumnDef="capacity">
+      <th mat-header-cell *matHeaderCellDef> Capacity </th>
+      <td mat-cell *matCellDef="let room"> {{room.capacity}} </td>
     </ng-container>
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef> Type </th>
-      <td mat-cell *matCellDef="let equipment"> {{equipment.type}} </td>
+    <ng-container matColumnDef="hostel">
+      <th mat-header-cell *matHeaderCellDef> Hostel </th>
+      <td mat-cell *matCellDef="let room"> {{room.hostel.name}} </td>
     </ng-container>
-    <ng-container matColumnDef="hp">
-      <th mat-header-cell *matHeaderCellDef> HP </th>
-      <td mat-cell *matCellDef="let equipment"> {{equipment.hp}} </td>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Actions
+      </th>
+      <td mat-cell *matCellDef="let room">
+          <mat-icon aria-hidden="false" aria-label="Example person icon" fontIcon="person" 
+            alt="Go To Tenants" (click)=gotoTenants(room.id)></mat-icon>
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic hostels">
+    </mat-paginator>
 </div>
