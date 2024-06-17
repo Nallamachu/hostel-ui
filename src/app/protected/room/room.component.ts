@@ -2,7 +2,7 @@ import { Component, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
-import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
+import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_HOSTEL_ID, LOCALSTORAGE_ROOM_ID, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 import { Room, Response } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
 import { ProtectedService } from '../protected.service';
@@ -22,11 +22,16 @@ export class RoomComponent {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+  selectedHostelId = localStorage.getItem(LOCALSTORAGE_HOSTEL_ID);
+
   ngOnInit() {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
-      this.getAllRoomsByUserId();
+      console.log('selected hostel id = '+this.selectedHostelId);
+      (this.selectedHostelId == undefined)
+        ?this.getAllRoomsByUserId()
+        :this.getAllRoomsByHostelId(this.selectedHostelId);
     }
   }
 
@@ -94,6 +99,7 @@ export class RoomComponent {
   }
 
   gotoTenants(roomId:any) {
-    console.log(roomId)
+    localStorage.setItem(LOCALSTORAGE_ROOM_ID, roomId);
+      this.router.navigate(['tenant']);
   }
 }

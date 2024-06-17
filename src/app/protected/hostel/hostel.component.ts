@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { LOCALSTORAGE_TOKEN_KEY, LOCALSTORAGE_CURRENT_USER } from 'src/app/constants';
+import { LOCALSTORAGE_TOKEN_KEY, LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_HOSTEL_ID } from 'src/app/constants';
 import { environment } from 'src/environments/environment'
 import { ProtectedService } from '../protected.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -50,8 +50,8 @@ export class HostelComponent implements AfterViewInit {
   };
   getHostels() {
     var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
-    let url = environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user';
-    const hostels = this.protectedService.getHostels(url, userId).subscribe(
+    let url = environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user-no-pagination';
+    const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
       (data) => {
         this.response = data;
         if(this.response.error) {
@@ -75,6 +75,12 @@ export class HostelComponent implements AfterViewInit {
   }
 
   gotoRooms(_hostelId: any){
-      
+      localStorage.setItem(LOCALSTORAGE_HOSTEL_ID, _hostelId);
+      this.router.navigate(['room']);
+  }
+
+  gotoExpenses(_hostelId: any) {
+    localStorage.setItem(LOCALSTORAGE_HOSTEL_ID, _hostelId);
+    this.router.navigate(['expense']);
   }
 }

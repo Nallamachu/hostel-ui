@@ -46,8 +46,8 @@
           Actions
         </th>
         <td mat-cell *matCellDef="let tenant">
-            <mat-icon aria-hidden="false" aria-label="Example person icon" fontIcon="person" 
-              alt="Go To Tenants" (click)=gotoTenantDetails(tenant.id)></mat-icon>
+            <mat-icon aria-hidden="false" aria-label="Example person icon" fontIcon="person_3" 
+              title="Tenant Details" (click)=gotoTenantDetails(tenant.id)></mat-icon>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

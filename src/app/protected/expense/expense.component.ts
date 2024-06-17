@@ -2,7 +2,7 @@ import { Component, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
-import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
+import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_HOSTEL_ID, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 import { Expense, Response } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
 import { ProtectedService } from '../protected.service';
@@ -22,11 +22,15 @@ export class ExpenseComponent {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+  selectedHostelId = localStorage.getItem(LOCALSTORAGE_HOSTEL_ID);
+
   ngOnInit() {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
-      this.getAllExpensesByUserId();
+      (this.selectedHostelId == undefined)
+        ?this.getAllExpensesByUserId()
+        :this.getAllExpensesByHostelId(this.selectedHostelId);
     }
   }
 
@@ -61,6 +65,30 @@ export class ExpenseComponent {
       },
       (error) => {
         console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return expenses;
+  }
+
+  getAllExpensesByHostelId(selectedHostelId: string) {
+    let url = environment.API_URL + '/api/v1/expense/find-all-expenses-by-hostel-id';
+    const expenses = this.protectedService.getAllExpensesByHostelId(url, selectedHostelId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.dataSource = new MatTableDataSource<Expense>(this.response.data);
+          this.dataSource.paginator = this.paginator;
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all expenses by hostel id');
         tap(() => this.snackbar.open(error, 'Close', {
           duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
         }))

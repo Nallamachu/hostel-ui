@@ -38,7 +38,10 @@
                 Actions
             </th>
             <td mat-cell *matCellDef="let hostel">
-                <mat-icon aria-hidden="false" aria-label="Example bedroom_parent icon" fontIcon="bedroom_parent" alt="Go To Rooms" (click)=gotoRooms(hostel.id)></mat-icon>
+                <mat-icon aria-hidden="false" class="mat-icon-rtl-mirror"
+                    fontIcon="bedroom" title="Rooms" (click)=gotoRooms(hostel.id)></mat-icon>
+                <mat-icon aria-hidden="false" aria-label="Example bedroom_parent icon" 
+                    fontIcon="event_note" title="Expenses" (click)=gotoExpenses(hostel.id)></mat-icon>
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

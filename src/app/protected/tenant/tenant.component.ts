@@ -2,7 +2,7 @@ import { Component, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
-import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
+import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_ROOM_ID, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 import { Tenant, Response } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
 import { ProtectedService } from '../protected.service';
@@ -20,11 +20,16 @@ export class TenantComponent {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+  selectedRoomId = localStorage.getItem(LOCALSTORAGE_ROOM_ID);
+
   ngOnInit() {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
-      this.getAllTenantsByUserId();
+      (this.selectedRoomId == undefined)
+        ? this.getAllTenantsByUserId()
+        : this.getAllTenantsByRoomId(this.selectedRoomId);
+      ;
     }
   }
 
@@ -46,6 +51,30 @@ export class TenantComponent {
     var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
     let url = environment.API_URL + '/api/v1/tenant/tenants-by-user-id';
     const tenants = this.protectedService.getAllTenantsByUserId(url, userId).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        } else {
+          this.dataSource = new MatTableDataSource<Tenant>(this.response.data);
+          this.dataSource.paginator = this.paginator;
+        }
+      },
+      (error) => {
+        console.log('Error while trying to fetch all hostels');
+        tap(() => this.snackbar.open(error, 'Close', {
+          duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+        }))
+      }
+    );
+    return tenants;
+  }
+
+  getAllTenantsByRoomId(roomId: any) {
+    let url = environment.API_URL + '/api/v1/tenant/tenants-by-room-id';
+    const tenants = this.protectedService.getAllTenantsByRoomId(url, roomId).subscribe(
       (data) => {
         this.response = data;
         if(this.response.error) {

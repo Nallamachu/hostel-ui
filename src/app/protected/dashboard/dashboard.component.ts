@@ -2,7 +2,7 @@ import { Hostel, Tenant, Expense, Response, Room } from 'src/app/public/interfac
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { LOCALSTORAGE_TOKEN_KEY, LOCALSTORAGE_CURRENT_USER } from 'src/app/constants';
+import { LOCALSTORAGE_TOKEN_KEY, LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_HOSTEL_ID, LOCALSTORAGE_ROOM_ID } from 'src/app/constants';
 import { environment } from 'src/environments/environment'
 import { ProtectedService } from '../protected.service';
 import { tap } from 'rxjs';
@@ -20,6 +20,8 @@ export class DashboardComponent {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
+      localStorage.removeItem(LOCALSTORAGE_HOSTEL_ID);
+      localStorage.removeItem(LOCALSTORAGE_ROOM_ID);
       this.getAllHostels();
       this.getAllRoomsByUserId();
       this.getAllTenantsByUserId();

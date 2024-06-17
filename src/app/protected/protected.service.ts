@@ -54,11 +54,23 @@ export class ProtectedService {
 		return this.httpClient.get<any>(url, {params: params});              
 	}
 
+  getAllTenantsByRoomId(url: string, roomId: number) {
+    let params = new HttpParams();
+    params = params.append('roomId', roomId);
+		return this.httpClient.get<any>(url, {params: params});              
+	}
+
   getAllExpensesByUserId(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);
 		return this.httpClient.get<any>(url, {params: params});              
 	}
+
+  getAllExpensesByHostelId(url: string, selectedHostelId: string) {
+    let params = new HttpParams();
+    params = params.append('hostelId', selectedHostelId);
+		return this.httpClient.get<any>(url, {params: params}); 
+  }
 
   async createHostel(url: string, hostel: Hostel) {
 		return await this.httpClient.post(environment.API_URL+ url, hostel).toPromise();
