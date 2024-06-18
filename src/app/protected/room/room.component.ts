@@ -28,7 +28,6 @@ export class RoomComponent {
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
-      console.log('selected hostel id = '+this.selectedHostelId);
       (this.selectedHostelId == undefined)
         ?this.getAllRoomsByUserId()
         :this.getAllRoomsByHostelId(this.selectedHostelId);
@@ -96,6 +95,19 @@ export class RoomComponent {
       }
     );
     return rooms;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  createRoom(){
+    
   }
 
   gotoTenants(roomId:any) {

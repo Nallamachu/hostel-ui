@@ -17,3 +17,10 @@
   .mat-mdc-row:hover .mat-mdc-cell {
     border-color: currentColor;
   }
+
+  .title-bar {
+    height: 2.5%;
+    display: flex;
+    font-weight: 600;
+    z-index: 1000;
+  }

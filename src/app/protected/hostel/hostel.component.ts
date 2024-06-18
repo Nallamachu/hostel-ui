@@ -59,7 +59,6 @@ export class HostelComponent implements AfterViewInit {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
-          console.log(this.response.data[0])
           this.dataSource = new MatTableDataSource<Hostel>(this.response.data);
           this.dataSource.paginator = this.paginator;
         }
@@ -72,6 +71,19 @@ export class HostelComponent implements AfterViewInit {
       }
     );
     return hostels;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  createHostel(){
+
   }
 
   gotoRooms(_hostelId: any){

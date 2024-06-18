@@ -17,3 +17,12 @@ data-table {
 .mat-mdc-row:hover .mat-mdc-cell {
   border-color: currentColor;
 }
+
+.title-bar {
+  height: 2.0%;
+  font-weight: 900;
+  z-index: 1000;
+  display: table-cell;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

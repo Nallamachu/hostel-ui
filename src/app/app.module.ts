@@ -59,7 +59,7 @@ export function tokenGetter() {
       }
     })
   ],
-  providers:[CdkColumnDef],
+  providers: [CdkColumnDef],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

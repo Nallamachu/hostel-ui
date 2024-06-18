@@ -1,5 +1,14 @@
 <div>
-    <h2>Hostel:</h2>
+    <ng-container class="title-bar">
+        <mat-label style="font-size: large;"><b>Hostels:</b></mat-label>
+        <mat-form-field style="margin-left: 10rem; margin-right: 10rem; width: 40%;">
+            <mat-label>Search Here</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Sri Balaji" #input>
+        </mat-form-field>
+        <button mat-fab extended (click)="createHostel()" primary>
+            <mat-icon title="Create Hostel">add_circle</mat-icon>Create Hostel
+        </button>
+    </ng-container>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 data-table">
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> Id </th>
@@ -19,7 +28,8 @@
         </ng-container>
         <ng-container matColumnDef="owner">
             <th mat-header-cell *matHeaderCellDef> Owner Name </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.owner.firstname}} {{hostel.owner.middlename}} {{hostel.owner.lastname}} </td>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.owner.firstname}} {{hostel.owner.middlename}}
+                {{hostel.owner.lastname}} </td>
         </ng-container>
         <ng-container matColumnDef="contact">
             <th mat-header-cell *matHeaderCellDef> Contact </th>
@@ -27,28 +37,31 @@
         </ng-container>
         <ng-container matColumnDef="address">
             <th mat-header-cell *matHeaderCellDef> Address </th>
-            <td mat-cell *matCellDef="let hostel"> {{hostel.address.street}}, {{hostel.address.city}}, {{hostel.address.state}}, {{hostel.address.country}}, {{hostel.address.zipcode}} </td>
+            <td mat-cell *matCellDef="let hostel"> {{hostel.address.street}}, {{hostel.address.city}},
+                {{hostel.address.state}}, {{hostel.address.country}}, {{hostel.address.zipcode}} </td>
         </ng-container>
         <ng-container matColumnDef="isActive">
             <th mat-header-cell *matHeaderCellDef> Active </th>
             <td mat-cell *matCellDef="let hostel"> {{(hostel.isActive)?"YES":"NO"}} </td>
         </ng-container>
-        <ng-container  matColumnDef="actions">
+        <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 Actions
             </th>
             <td mat-cell *matCellDef="let hostel">
-                <mat-icon aria-hidden="false" class="mat-icon-rtl-mirror"
-                    fontIcon="bedroom" title="Rooms" (click)=gotoRooms(hostel.id)></mat-icon>
-                <mat-icon aria-hidden="false" aria-label="Example bedroom_parent icon" 
-                    fontIcon="event_note" title="Expenses" (click)=gotoExpenses(hostel.id)></mat-icon>
+                <mat-icon aria-hidden="false" class="mat-icon-rtl-mirror" fontIcon="bedroom" title="Rooms"
+                    (click)=gotoRooms(hostel.id)></mat-icon>
+                <mat-icon aria-hidden="false" aria-label="Example bedroom_parent icon" fontIcon="event_note"
+                    title="Expenses" (click)=gotoExpenses(hostel.id)></mat-icon>
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons
-                 aria-label="Select page of periodic hostels">
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic hostels">
     </mat-paginator>
 </div>

@@ -60,7 +60,6 @@ export class DashboardComponent {
           }))
         } else {
           this.hostels = this.response.data;
-          console.log(this.hostels);
         }
       },
       (error) => {
@@ -85,11 +84,10 @@ export class DashboardComponent {
           }))
         } else {
           this.rooms = this.response.data;
-          console.log(this.rooms);
         }
       },
       (error) => {
-        console.log('Error while trying to fetch all hostels');
+        console.log('Error while trying to fetch all rooms');
         tap(() => this.snackbar.open(error, 'Close', {
           duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
         }))
@@ -110,7 +108,6 @@ export class DashboardComponent {
           }))
         } else {
           this.tenants = this.response.data;
-          console.log(this.tenants);
         }
       },
       (error) => {
@@ -135,11 +132,10 @@ export class DashboardComponent {
           }))
         } else {
           this.expenses = this.response.data;
-          console.log(this.expenses);
         }
       },
       (error) => {
-        console.log('Error while trying to fetch all hostels');
+        console.log('Error while trying to fetch getAllExpensesByUserId');
         tap(() => this.snackbar.open(error, 'Close', {
           duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
         }))

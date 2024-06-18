@@ -9,9 +9,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { TenantComponent } from './tenant/tenant.component';
 import { ExpenseComponent } from './expense/expense.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -23,15 +26,16 @@ import { ExpenseComponent } from './expense/expense.component';
   ],
   imports: [
     CommonModule,
-    // Import our Routes for this module
     ProtectedRoutingModule,
-    // Angular Material Imports
     MatButtonModule,
     MatCardModule,
     MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule
   ]
 })
 export class ProtectedModule { }

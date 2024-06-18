@@ -87,7 +87,7 @@ export class TenantComponent {
         }
       },
       (error) => {
-        console.log('Error while trying to fetch all hostels');
+        console.log('Error while trying to fetch getAllTenantsByRoomId');
         tap(() => this.snackbar.open(error, 'Close', {
           duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
         }))
@@ -98,5 +98,18 @@ export class TenantComponent {
 
   gotoTenantDetails(tenantId:any) {
     console.log(tenantId);
+  }
+
+  addTenant(){
+
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

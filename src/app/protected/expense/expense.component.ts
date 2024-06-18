@@ -64,7 +64,7 @@ export class ExpenseComponent {
         }
       },
       (error) => {
-        console.log('Error while trying to fetch all hostels');
+        console.log('Error while trying to fetch getAllExpensesByUserId');
         tap(() => this.snackbar.open(error, 'Close', {
           duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
         }))
@@ -88,13 +88,26 @@ export class ExpenseComponent {
         }
       },
       (error) => {
-        console.log('Error while trying to fetch all expenses by hostel id');
+        console.log('Error while trying to fetch getAllExpensesByHostelId');
         tap(() => this.snackbar.open(error, 'Close', {
           duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
         }))
       }
     );
     return expenses;
+  }
+
+  addExpense(){
+
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   gotoExpense(expenseId:any){
