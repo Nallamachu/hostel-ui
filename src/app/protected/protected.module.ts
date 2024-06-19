@@ -15,6 +15,9 @@ import { ExpenseComponent } from './expense/expense.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { CreateHostelComponent } from './hostel/create-hostel/create-hostel.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,8 @@ import { MatListModule } from '@angular/material/list';
     HostelComponent,
     RoomComponent,
     TenantComponent,
-    ExpenseComponent
+    ExpenseComponent,
+    CreateHostelComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +39,10 @@ import { MatListModule } from '@angular/material/list';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule
   ]
 })
 export class ProtectedModule { }

@@ -2,7 +2,7 @@
 </div>
 <ng-template #content>
   <div>
-    <h2 *ngIf="hostels.length > 0">Hostels</h2>
+    <mat-label *ngIf="hostels.length > 0" style="font-size: large;"><b>Hostels : {{hostels.length}}</b></mat-label>
     <div *ngIf="hostels.length > 0">
       <mat-card class="flex-me" *ngFor="let hostel of hostels" >
         <mat-card-header>
@@ -18,7 +18,7 @@
       </mat-card>
     </div>
     <hr class="gradient">
-    <h2 style="margin-top: 20px;" *ngIf="rooms.length > 0">Rooms</h2>
+    <mat-label style="margin-top: 20px;font-size: large;" *ngIf="rooms.length > 0"><b>Rooms : {{rooms.length}}</b></mat-label>
     <div *ngIf="rooms.length > 0">
       <mat-card class="flex-me" *ngFor="let room of rooms" >
         <mat-card-header>
@@ -33,7 +33,7 @@
       </mat-card>
     </div>
     <hr class="gradient">
-    <h2 style="margin-top: 20px;" *ngIf="tenants.length > 0" >Tenants:</h2>
+    <mat-label style="margin-top: 20px;font-size: large;" *ngIf="tenants.length > 0" ><b>Tenants : {{tenants.length}}</b></mat-label>
     <div *ngIf="tenants.length > 0" >
       <mat-card class="flex-me" *ngFor="let tenant of tenants">
         <mat-card-header>
@@ -51,7 +51,7 @@
       </mat-card>
     </div>
     <hr class="gradient">
-    <h2 style="margin-top: 20px;" *ngIf="expenses.length > 0" >Expenses:</h2>
+    <mat-label style="margin-top: 20px;font-size: large;" *ngIf="expenses.length > 0"><b>Expenses : {{expenses.length}}</b></mat-label>
     <div *ngIf="expenses.length > 0" >
       <mat-card class="flex-me" *ngFor="let expense of expenses">
         <mat-card-header>

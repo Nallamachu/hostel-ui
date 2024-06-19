@@ -1,0 +1,58 @@
+<mat-card class="mat-card">
+    <mat-card-title>Create Hostel</mat-card-title>
+    <mat-card-content class="mat-card-content">
+        <form [formGroup]="createHostelForm" class="form">
+
+            <mat-form-field class="mat-form-field">
+                <input type="text" matInput placeholder="Hostel Name" formControlName="name">
+                <mat-error
+                    *ngIf="this.createHostelForm.get('name')?.touched && this.createHostelForm.get('name')?.hasError('required')">
+                    Hostel Name is mandatory</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Hostel Type</mat-label>
+                <mat-select formControlName="type" name="type">
+                    <mat-option *ngFor="let hostelType of hostelTypes;" [value]="hostelType.id">{{hostelType.value}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <input type="text" matInput placeholder="Street" formControlName="street">
+                <mat-error
+                    *ngIf="this.createHostelForm.get('street')?.touched && this.createHostelForm.get('street')?.hasError('required')">
+                    Street is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field">
+                <input type="text" matInput placeholder="City" formControlName="city">
+                <mat-error
+                    *ngIf="this.createHostelForm.get('city')?.touched && this.createHostelForm.get('city')?.hasError('required')">
+                    City is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field">
+                <input type="text" matInput placeholder="State" formControlName="state">
+                <mat-error
+                    *ngIf="this.createHostelForm.get('state')?.touched && this.createHostelForm.get('state')?.hasError('required')">
+                    State is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field">
+                <input type="text" matInput placeholder="Country" formControlName="country">
+                <mat-error
+                    *ngIf="this.createHostelForm.get('country')?.touched && this.createHostelForm.get('country')?.hasError('required')">
+                    Country is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field">
+                <input type="text" matInput placeholder="Pincode" formControlName="zipcode">
+                <mat-error
+                    *ngIf="this.createHostelForm.get('zipcode')?.touched && this.createHostelForm.get('zipcode')?.hasError('required')">
+                    Pincode is required</mat-error>
+            </mat-form-field>
+
+            <div class="button">
+                <a mat-button (click)="backToHostels()">Back to Hostel</a>
+                <button type="submit" mat-button [disabled]="!createHostelForm.valid" 
+                    (click)="createHostel()">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

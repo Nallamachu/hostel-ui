@@ -8,6 +8,7 @@ import { HostelComponent } from './protected/hostel/hostel.component';
 import { RoomComponent } from './protected/room/room.component';
 import { TenantComponent } from './protected/tenant/tenant.component';
 import { ExpenseComponent } from './protected/expense/expense.component';
+import { CreateHostelComponent } from './protected/hostel/create-hostel/create-hostel.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'hostel',
     component: HostelComponent
+  },
+  {
+    path: 'create-hostel',
+    component: CreateHostelComponent
   },
   {
     path: 'room',

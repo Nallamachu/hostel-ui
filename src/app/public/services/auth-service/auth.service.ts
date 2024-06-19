@@ -52,7 +52,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(environment.API_URL + '/api/v1/auth/authenticate', loginRequest).pipe(
       tap((res: LoginResponse) => {
         localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, res.accessToken),
-          localStorage.setItem(LOCALSTORAGE_CURRENT_USER, String(res.refreshToken.id))
+        localStorage.setItem(LOCALSTORAGE_CURRENT_USER, String(res.refreshToken.id))
         this.loggedIn.next(true)
       }),
       tap(() => this.snackbar.open('Login Successfull', 'Close', {

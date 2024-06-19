@@ -2,6 +2,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HostelComponent } from './hostel/hostel.component';
+import { CreateHostelComponent } from './hostel/create-hostel/create-hostel.component';
 import { RoomComponent } from './room/room.component';
 import { TenantComponent } from './tenant/tenant.component';
 import { ExpenseComponent } from './expense/expense.component';
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'hostel',
     component: HostelComponent
+  },
+  {
+    path: 'create-hostel',
+    component: CreateHostelComponent
   },
   {
     path: 'room',

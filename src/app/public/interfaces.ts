@@ -58,6 +58,7 @@ export interface RegisterResponse {
 
 
 export interface User {
+  id: number,
   firstname: string,
   middlename: string,
   lastname: string,

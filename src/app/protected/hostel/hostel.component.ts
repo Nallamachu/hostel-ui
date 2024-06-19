@@ -83,7 +83,42 @@ export class HostelComponent implements AfterViewInit {
   }
 
   createHostel(){
+    this.router.navigate(['create-hostel']);
+  }
 
+  modifyHostel(hostel: Hostel) {
+    console.log("TODO - Yet to implement the modify hostel " + JSON.stringify(hostel))
+  }
+
+  deleteHostel(hostel: Hostel) {
+    let url = environment.API_URL + '/api/v1/hostel/delete-hostel/';
+    const name = 'Delete ' + hostel.name + ' ' + '?';
+    if(window.confirm('Are you sure you want to delete the hostel ' +hostel.name + '?')){
+      return this.protectedService.deleteRecord(url+hostel.id).subscribe(
+        (data) => {
+          this.response = data;
+          if(this.response.error) {
+            tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            }))
+          } else {
+            this.deleteRowDataTable (hostel.id,  this.paginator, this.dataSource);
+          }
+        },
+        (error) => {
+          console.log('Error while trying to fetch all hostels');
+          tap(() => this.snackbar.open(error, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        }
+      );
+    }
+  }
+
+  private deleteRowDataTable (recordId:number, paginator: any, dataSource: any) {
+    const itemIndex = dataSource.data.findIndex((obj:any) => obj['id'] === recordId);
+    dataSource.data.splice(itemIndex, 1);
+    dataSource.paginator = paginator;
   }
 
   gotoRooms(_hostelId: any){

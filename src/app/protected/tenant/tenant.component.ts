@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./tenant.component.scss']
 })
 export class TenantComponent {
+
   protectedService = inject(ProtectedService);
   dataSource = new MatTableDataSource<Tenant>();
   @ViewChild(MatPaginator)
@@ -102,6 +103,13 @@ export class TenantComponent {
 
   addTenant(){
 
+  }
+
+  deleteTenant(tenant: Tenant) {
+    console.log(tenant);
+  }
+  modifyTenant(tenant: Tenant) {
+    console.log(tenant);
   }
 
   applyFilter(event: Event) {

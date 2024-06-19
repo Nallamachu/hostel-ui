@@ -16,6 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 
 export class RoomComponent {
+
   protectedService = inject(ProtectedService);
   dataSource = new MatTableDataSource<Room>();
 
@@ -108,6 +109,13 @@ export class RoomComponent {
 
   createRoom(){
     
+  }
+
+  deleteRoom(room: Room) {
+    console.log(room);
+  }
+  modifyRoom(room: Room) {
+    console.log(room);
   }
 
   gotoTenants(roomId:any) {

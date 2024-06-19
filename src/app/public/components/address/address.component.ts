@@ -13,7 +13,6 @@ export class AddressComponent {
   constructor() {
     this.addressForm = new FormGroup(
       {
-        // TODO - address fields validation
         street: new FormControl(null, [Validators.required]),
         city: new FormControl(null, [Validators.required]),
         state: new FormControl(null, [Validators.required]),

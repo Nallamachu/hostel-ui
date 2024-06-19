@@ -101,6 +101,13 @@ export class ExpenseComponent {
 
   }
 
+  deleteExpense(expense: Expense) {
+    console.log(expense);
+  }
+  modifyExpense(expense: Expense) {
+    console.log(expense);
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

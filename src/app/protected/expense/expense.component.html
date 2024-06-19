@@ -5,7 +5,7 @@
       <mat-label>Search Here</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Subbareddy" #input>
     </mat-form-field>
-    <button mat-fab extended (click)="addExpense()">
+    <button mat-fab extended (click)="addExpense()" style="background-color: #1e4b4f;">
       <mat-icon title="Add Expense">add_circle</mat-icon>Create Expense
     </button>
   </ng-container>
@@ -41,6 +41,10 @@
         <td mat-cell *matCellDef="let expense">
             <mat-icon aria-hidden="false" aria-label="Example explore icon" fontIcon="explore" 
               title="Go To Expense" (click)=gotoExpense(expense.id)></mat-icon>
+            <mat-icon aria-hidden="false" class="mat-icon-rtl-mirror" fontIcon="edit"
+              title="Modify Expense" (click)=modifyExpense(expense)></mat-icon>
+            <mat-icon aria-hidden="false" class="mat-icon-rtl-mirror" fontIcon="delete"
+              title="Delete Expense" (click)=deleteExpense(expense)></mat-icon>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
