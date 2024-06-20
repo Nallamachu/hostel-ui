@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
-import { CreateHostelComponent } from './hostel/create-hostel/create-hostel.component';
+import { CreateUpdateHostelComponent } from './hostel/create-update-hostel/create-update-hostel.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -32,7 +32,7 @@ import { CreateUpdateExpenseComponent } from './expense/create-update-expense/cr
     RoomComponent,
     TenantComponent,
     ExpenseComponent,
-    CreateHostelComponent,
+    CreateUpdateHostelComponent,
     CreateUpdateRoomComponent,
     CreateUpdateTenantComponent,
     CreateUpdateExpenseComponent

@@ -8,7 +8,7 @@ import { HostelComponent } from './protected/hostel/hostel.component';
 import { RoomComponent } from './protected/room/room.component';
 import { TenantComponent } from './protected/tenant/tenant.component';
 import { ExpenseComponent } from './protected/expense/expense.component';
-import { CreateHostelComponent } from './protected/hostel/create-hostel/create-hostel.component';
+import { CreateUpdateHostelComponent } from './protected/hostel/create-update-hostel/create-update-hostel.component';
 import { CreateUpdateRoomComponent } from './protected/room/create-update-room/create-update-room.component';
 import { CreateUpdateTenantComponent } from './protected/tenant/create-update-tenant/create-update-tenant.component';
 import { CreateUpdateExpenseComponent } from './protected/expense/create-update-expense/create-update-expense.component';
@@ -31,8 +31,8 @@ const routes: Routes = [
     component: HostelComponent
   },
   {
-    path: 'create-hostel',
-    component: CreateHostelComponent
+    path: 'create-update-hostel',
+    component: CreateUpdateHostelComponent
   },
   {
     path: 'room',

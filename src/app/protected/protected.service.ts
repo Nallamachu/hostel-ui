@@ -2,13 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Expense, Response, Room, Tenant } from '../public/interfaces';
+import { Expense, Hostel, Response, Room, Tenant } from '../public/interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProtectedService {
+  hostelToModify!: Hostel;
 
   constructor(private httpClient: HttpClient,
     private snackbar: MatSnackBar,
@@ -32,6 +33,10 @@ export class ProtectedService {
 
   createHostel(url: string, hostel:any) : Observable<Response>{
     return this.httpClient.post<Response>(url, hostel);
+  }
+
+  updateHostel(url: string, hostel:any) : Observable<Response>{
+    return this.httpClient.put<Response>(url, hostel);
   }
 
   deleteRecord(url: string) {

@@ -10,17 +10,19 @@ import { Response } from 'src/app/public/interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-create-hostel',
-  templateUrl: './create-hostel.component.html',
-  styleUrls: ['./create-hostel.component.scss']
+  selector: 'app-create-update-hostel',
+  templateUrl: './create-update-hostel.component.html',
+  styleUrls: ['./create-update-hostel.component.scss']
 })
-export class CreateHostelComponent {
+export class CreateUpdateHostelComponent {
 
   public createHostelForm: FormGroup;
+  hostelToModify : Hostel | undefined;
+
   hostelTypes = [
-    {id: 'MEN', value: 'MENS - Mens Hostel'},
-    {id: 'WOMEN', value: 'WOMENS - Womens Hostel'},
-    {id: 'COLIVE', value: 'COLIVE - Living Together'},
+    {id: 'MEN', value: 'MENS'},
+    {id: 'WOMEN', value: 'WOMENS'},
+    {id: 'COLIVE', value: 'COLIVE'},
   ];
 
   constructor(
@@ -30,22 +32,71 @@ export class CreateHostelComponent {
   ) {
     this.createHostelForm = new FormGroup(
       {
+        id: new FormControl(),
         name: new FormControl(null, [Validators.required]),
         type: new FormControl(null, [Validators.required]),
+        isActive: new FormControl(),
         street: new FormControl(null, [Validators.required]),
         city: new FormControl(null, [Validators.required]),
         state: new FormControl(null, [Validators.required]),
         country: new FormControl(null, [Validators.required]),
-        zipcode: new FormControl(null, [Validators.required])
+        zipcode: new FormControl(null, [Validators.required]),
+        owner: new FormControl()
       }
     )
+    if(protectedService.hostelToModify != null){
+      this.hostelToModify = protectedService.hostelToModify;
+      this.fillTheForm(this.hostelToModify);
+    }
   }
 
-  async createHostel() {
+  fillTheForm(hostel: Hostel){
+    this.createHostelForm.setValue({
+      id:hostel.id,
+      name: hostel.name,
+      type: hostel.type,
+      isActive: hostel.isActive,
+      street: hostel.address.street,
+      city: hostel.address.city,
+      state: hostel.address.state,
+      country: hostel.address.country,
+      zipcode: hostel.address.zipcode,
+      owner: hostel.owner
+    });
+  }
+
+  createOrModifyHostel() {
     if(this.createHostelForm.invalid)
       return;
 
+    if(this.createHostelForm.value.id != null || this.createHostelForm.value.id != undefined){
+      this.modifyHostel();
+    } else {
+      this.createHostel();
+    }
+  }
+
+  async modifyHostel() {
     const hostel = this.getHostelObject(this.createHostelForm.value);
+    this.protectedService.updateHostel(environment.API_URL + '/api/v1/hostel/modify-hostel/'+ hostel.id, hostel).pipe(
+      tap((res: Response) => {
+        if (res.error) {
+          tap(() => this.snackbar.open(res.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }));
+        } else {
+          tap(() => this.snackbar.open('Hostel Modified Successfully', 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }));
+          this.router.navigate(['hostel']);
+        }
+      })
+    ).subscribe();
+  }
+
+  async createHostel() {
+    const hostel = this.getHostelObject(this.createHostelForm.value);
+    hostel.owner.id = Number(localStorage.getItem(LOCALSTORAGE_CURRENT_USER));
     this.protectedService.createHostel(environment.API_URL + '/api/v1/hostel/create-hostel', hostel).pipe(
       tap((res: Response) => {
         if (res.error) {
@@ -60,15 +111,14 @@ export class CreateHostelComponent {
         }
       })
     ).subscribe();
-    console.log(hostel);
   }
 
   getHostelObject(value : any){
     const _hostel : Hostel = {
       name: value.name,
       type: value.type,
-      isActive: true,
-      id: 0,
+      isActive: value.isActive,
+      id: value.id,
       contact: '',
       rooms: [],
       address: {
@@ -78,19 +128,8 @@ export class CreateHostelComponent {
         country: value.country,
         zipcode: value.zipcode
       },
-      owner: {
-        id: Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null)
-          ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER)
-          : "0"),
-        firstname: '',
-        middlename: '',
-        lastname: '',
-        email: '',
-        username: '',
-        mobile: '',
-        referralCode: '',
-        referredByCode: '',
-        points: 0
+      owner: (value.owner != null) ? value.owner : {
+        id:0
       }
     }
     return _hostel;

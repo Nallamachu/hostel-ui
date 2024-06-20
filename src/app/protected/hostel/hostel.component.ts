@@ -42,7 +42,7 @@ export class HostelComponent implements AfterViewInit {
   protectedService = inject(ProtectedService);
   dataSource = new MatTableDataSource<Hostel>();
 
-  displayedColumns: string[] = ["id", "name", "type", "rooms", "owner", "contact", "isActive", "address", "actions"];
+  displayedColumns: string[] = ["id", "name", "type", "owner", "contact", "isActive", "address", "actions"];
   allHostels: Hostel[] = [];
   response: Response = {
     data: [],
@@ -83,11 +83,12 @@ export class HostelComponent implements AfterViewInit {
   }
 
   createHostel() {
-    this.router.navigate(['create-hostel']);
+    this.router.navigate(['create-update-hostel']);
   }
 
   modifyHostel(hostel: Hostel) {
-    console.log("TODO - Yet to implement the modify hostel " + JSON.stringify(hostel))
+    this.protectedService.hostelToModify = hostel;
+    this.router.navigate(['create-update-hostel']);
   }
 
   deleteHostel(hostel: Hostel) {
