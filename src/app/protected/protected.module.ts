@@ -17,13 +17,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
-import { CreateUpdateHostelComponent } from './hostel/create-update-hostel/create-update-hostel.component';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { CreateUpdateRoomComponent } from './room/create-update-room/create-update-room.component';
 import { CreateUpdateTenantComponent } from './tenant/create-update-tenant/create-update-tenant.component';
 import { CreateUpdateExpenseComponent } from './expense/create-update-expense/create-update-expense.component';
+import { CreateUpdateHostelComponent } from './hostel/create-update-hostel/create-update-hostel.component';
 
 @NgModule({
   declarations: [
