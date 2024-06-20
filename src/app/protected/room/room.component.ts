@@ -1,9 +1,9 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_HOSTEL_ID, LOCALSTORAGE_ROOM_ID, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
-import { Room, Response } from 'src/app/public/interfaces';
+import { Room, Response, Tenant } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
 import { ProtectedService } from '../protected.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -108,12 +108,57 @@ export class RoomComponent {
   }
 
   createRoom(){
-    
+    this.router.navigate(['create-update-room']);
+  }
+  
+  deleteRoom(room: Room) {
+    this.protectedService.getAllTenantsByRoomNo(environment.API_URL+'/api/v1/tenant/tenants-by-room-no', room.roomNo).subscribe(
+      (data) => {
+        this.response = data;
+        if(this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+          return of(false);
+        } else if(this.response.data != null && this.response.data.length > 0){
+          if(this.response.data.length > 0) {
+            this.snackbar.open('Room is not empty. Cannot be deleted.', 'Close', {
+              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            });
+            return of(false);
+          }
+        } else {
+          let url = environment.API_URL + '/api/v1/room/delete-room-by-id/';
+          if(window.confirm('Are you sure you want to delete the room of ' + room.roomNo + '?')){
+            return this.protectedService.deleteRecord(url+room.id).subscribe(
+              (data) => {
+                if(data.error) {
+                  tap(() => this.snackbar.open(data.error[0].message, 'Close', {
+                    duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+                  }))
+                } else {
+                  this.deleteRowDataTable (room.id,  this.paginator, this.dataSource);
+                }
+              },
+              (error) => {
+                console.log('Error while trying to fetch all hostels');
+                tap(() => this.snackbar.open(error, 'Close', {
+                  duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+                }))
+              }
+            );
+          }
+        }
+      }
+    );
   }
 
-  deleteRoom(room: Room) {
-    console.log(room);
+  private deleteRowDataTable (recordId:number, paginator: any, dataSource: any) {
+    const itemIndex = dataSource.data.findIndex((obj:any) => obj['id'] === recordId);
+    dataSource.data.splice(itemIndex, 1);
+    dataSource.paginator = paginator;
   }
+
   modifyRoom(room: Room) {
     console.log(room);
   }

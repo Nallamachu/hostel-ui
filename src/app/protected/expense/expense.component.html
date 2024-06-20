@@ -1,11 +1,11 @@
 <div>
   <ng-container class="title-bar">
     <mat-label style="font-size: large;"><b>Expenses:</b></mat-label>
-    <mat-form-field style="margin-left: 5rem; margin-right: 5rem; width: 40%;">
+    <mat-form-field style="margin-left: 5rem; width: 40%;">
       <mat-label>Search Here</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Subbareddy" #input>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Expense" #input>
     </mat-form-field>
-    <button mat-fab extended (click)="addExpense()" style="background-color: #1e4b4f;">
+    <button mat-fab extended (click)="addExpense()" style="background-color: #1e4b4f; float: right;">
       <mat-icon title="Add Expense">add_circle</mat-icon>Create Expense
     </button>
   </ng-container>
@@ -24,7 +24,7 @@
       </ng-container>
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let expense"> {{expense.date}} </td>
+        <td mat-cell *matCellDef="let expense"> {{expense.date | date : "dd/MM/YYYY"}} </td>
       </ng-container>
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef> Amount </th>

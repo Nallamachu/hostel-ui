@@ -9,6 +9,9 @@ import { RoomComponent } from './protected/room/room.component';
 import { TenantComponent } from './protected/tenant/tenant.component';
 import { ExpenseComponent } from './protected/expense/expense.component';
 import { CreateHostelComponent } from './protected/hostel/create-hostel/create-hostel.component';
+import { CreateUpdateRoomComponent } from './protected/room/create-update-room/create-update-room.component';
+import { CreateUpdateTenantComponent } from './protected/tenant/create-update-tenant/create-update-tenant.component';
+import { CreateUpdateExpenseComponent } from './protected/expense/create-update-expense/create-update-expense.component';
 
 const routes: Routes = [
   {
@@ -36,12 +39,24 @@ const routes: Routes = [
     component: RoomComponent
   },
   {
+    path: 'create-update-room',
+    component: CreateUpdateRoomComponent
+  },
+  {
     path: 'tenant',
     component: TenantComponent
   },
   {
+    path: 'create-update-tenant',
+    component: CreateUpdateTenantComponent
+  },
+  {
     path: 'expense',
     component: ExpenseComponent
+  },
+  {
+    path: 'create-update-expense',
+    component: CreateUpdateExpenseComponent
   },
   {
     path: '**',

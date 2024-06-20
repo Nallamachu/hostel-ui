@@ -2,14 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Response } from '../public/interfaces';
+import { Expense, Response, Room, Tenant } from '../public/interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProtectedService {
-  
 
   constructor(private httpClient: HttpClient,
     private snackbar: MatSnackBar,
@@ -28,7 +27,7 @@ export class ProtectedService {
   getAllHostelsByUser(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);
-		return this.httpClient.get<any>(url, {params: params});              
+		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
   createHostel(url: string, hostel:any) : Observable<Response>{
@@ -45,7 +44,7 @@ export class ProtectedService {
     params = params.append('page', 0);
     params = params.append('size', 10);
     params = params.append('sort', 'id');
-		return this.httpClient.get<any>(url, {params: params});              
+		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
   getAllRoomsByHostelId(url: string, hostelId: number) {
@@ -60,25 +59,39 @@ export class ProtectedService {
   getAllTenantsByUserId(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);
-		return this.httpClient.get<any>(url, {params: params});              
+		return this.httpClient.get<Response>(url, {params: params});              
 	}
+
+  createTenant(url: string, tenant: Tenant) {
+    return this.httpClient.post<Response>(url, tenant);
+  }
 
   getAllTenantsByRoomId(url: string, roomId: number) {
     let params = new HttpParams();
     params = params.append('roomId', roomId);
-		return this.httpClient.get<any>(url, {params: params});              
+		return this.httpClient.get<Response>(url, {params: params});              
+	}
+
+  getAllTenantsByRoomNo(url: string, roomNo: number) {
+    let params = new HttpParams();
+    params = params.append('roomNo', roomNo);
+		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
   getAllExpensesByUserId(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);
-		return this.httpClient.get<any>(url, {params: params});              
+		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
   getAllExpensesByHostelId(url: string, selectedHostelId: string) {
     let params = new HttpParams();
     params = params.append('hostelId', selectedHostelId);
-		return this.httpClient.get<any>(url, {params: params}); 
+		return this.httpClient.get<Response>(url, {params: params}); 
+  }
+
+  createExpense(url: string, expense: Expense) {
+    return this.httpClient.post<Response>(url, expense);
   }
 
 }

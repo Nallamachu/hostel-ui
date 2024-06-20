@@ -1,0 +1,47 @@
+<mat-card class="mat-card">
+    <mat-card-title>Create Expense</mat-card-title>
+    <mat-card-content class="mat-card-content">
+        <form [formGroup]="expenseForm" class="form">
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Select Hostel</mat-label>
+                <mat-select formControlName="hostel" name="hostel">
+                    <mat-option *ngFor="let hostel of hostels;" [value]="hostel">{{hostel.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Select Expense Type</mat-label>
+                <mat-select formControlName="expenseType" name="expenseType">
+                    <mat-option *ngFor="let expenseType of expenseTypes;" [value]="expenseType.id">{{expenseType.value}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Description</mat-label>
+                <input type="text" matInput placeholder="Description" formControlName="description">
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Choose Date (DD/MM/YYYY)</mat-label>
+                <input matInput [matDatepicker]="date" formControlName="date">
+                <mat-datepicker-toggle matIconSuffix [for]="date"></mat-datepicker-toggle>
+                <mat-datepicker #date></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Amount</mat-label>
+                <input type="number" matInput placeholder="Amount" formControlName="amount">
+                <mat-error
+                    *ngIf="this.expenseForm.get('amount')?.touched && this.expenseForm.get('amount')?.hasError('required')">
+                    Amount is mandatory. Amount value should be more than 0.</mat-error>
+            </mat-form-field>
+
+            <div class="button">
+                <a mat-button (click)="backToExpenses()">Back to Expenses</a>
+                <button type="submit" mat-button [disabled]="!expenseForm.valid" 
+                    (click)="createExpense()">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

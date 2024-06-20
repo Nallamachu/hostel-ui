@@ -15,9 +15,15 @@ import { ExpenseComponent } from './expense/expense.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 import { CreateHostelComponent } from './hostel/create-hostel/create-hostel.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { CreateUpdateRoomComponent } from './room/create-update-room/create-update-room.component';
+import { CreateUpdateTenantComponent } from './tenant/create-update-tenant/create-update-tenant.component';
+import { CreateUpdateExpenseComponent } from './expense/create-update-expense/create-update-expense.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +32,10 @@ import {MatSelectModule} from '@angular/material/select';
     RoomComponent,
     TenantComponent,
     ExpenseComponent,
-    CreateHostelComponent
+    CreateHostelComponent,
+    CreateUpdateRoomComponent,
+    CreateUpdateTenantComponent,
+    CreateUpdateExpenseComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +51,10 @@ import {MatSelectModule} from '@angular/material/select';
     MatListModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule
   ]
 })
 export class ProtectedModule { }

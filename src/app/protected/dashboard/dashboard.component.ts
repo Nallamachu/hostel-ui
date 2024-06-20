@@ -36,11 +36,8 @@ export class DashboardComponent {
   ) {}
 
   hostels : Hostel[]= [];
-
   rooms: Room[] = [];
-
   tenants: Tenant[] = []
-  
   expenses: Expense[] = [];
 
   response: Response = {

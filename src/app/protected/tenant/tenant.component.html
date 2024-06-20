@@ -20,11 +20,11 @@
       <td mat-cell *matCellDef="let tenant"> {{tenant.firstName}} {{tenant.middleName}} {{tenant.lastName}} </td>
     </ng-container>
     <ng-container matColumnDef="room">
-      <th mat-header-cell *matHeaderCellDef> Room No# </th>
+      <th mat-header-cell *matHeaderCellDef> Room No </th>
       <td mat-cell *matCellDef="let tenant"> {{tenant.room.roomNo}} </td>
     </ng-container>
     <ng-container matColumnDef="mobile">
-      <th mat-header-cell *matHeaderCellDef> Mobile No# </th>
+      <th mat-header-cell *matHeaderCellDef> Mobile No </th>
       <td mat-cell *matCellDef="let tenant"> {{tenant.mobile}} </td>
     </ng-container>
     <ng-container matColumnDef="idType">
@@ -32,7 +32,7 @@
       <td mat-cell *matCellDef="let tenant"> {{tenant.idType}} </td>
     </ng-container>
     <ng-container matColumnDef="idNumber">
-      <th mat-header-cell *matHeaderCellDef> Id Number# </th>
+      <th mat-header-cell *matHeaderCellDef> Id Number </th>
       <td mat-cell *matCellDef="let tenant"> {{tenant.idNumber}} </td>
     </ng-container>
     <ng-container matColumnDef="address">
@@ -42,11 +42,11 @@
     </ng-container>
     <ng-container matColumnDef="entryDate">
       <th mat-header-cell *matHeaderCellDef> Entry Date </th>
-      <td mat-cell *matCellDef="let tenant"> {{tenant.entryDate}} </td>
+      <td mat-cell *matCellDef="let tenant"> {{tenant.entryDate | date : "dd/MM/YYYY"}} </td>
     </ng-container>
     <ng-container matColumnDef="exitDate">
       <th mat-header-cell *matHeaderCellDef> Exit Date </th>
-      <td mat-cell *matCellDef="let tenant"> {{tenant.exitDate}} </td>
+      <td mat-cell *matCellDef="let tenant"> {{tenant.exitDate | date : "dd/MM/YYYY"}} </td>
     </ng-container>
     <ng-container matColumnDef="isActive">
       <th mat-header-cell *matHeaderCellDef> Active </th>

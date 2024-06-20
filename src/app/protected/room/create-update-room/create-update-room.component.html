@@ -1,0 +1,44 @@
+<mat-card class="mat-card">
+    <mat-card-title>Create Room</mat-card-title>
+    <mat-card-content class="mat-card-content">
+        <form [formGroup]="roomForm" class="form">
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Hostel</mat-label>
+                <mat-select formControlName="hostel" name="hostel">
+                    <mat-option *ngFor="let hostel of hostels;" [value]="hostel">{{hostel.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Room No#</mat-label>
+                <input type="number" matInput placeholder="Room No" formControlName="roomNo">
+                <mat-error
+                    *ngIf="this.roomForm.get('roomNo')?.touched && this.roomForm.get('roomNo')?.hasError('required')">
+                    Room No is mandatory</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Floor No#</mat-label>
+                <input type="number" matInput placeholder="Floor No" formControlName="floorNo">
+                <mat-error
+                    *ngIf="this.roomForm.get('floorNo')?.touched && this.roomForm.get('floorNo')?.hasError('required')">
+                    Floor No is mandatory</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Capacity</mat-label>
+                <input type="number" matInput placeholder="Capacity" formControlName="capacity">
+                <mat-error
+                    *ngIf="this.roomForm.get('capacity')?.touched && this.roomForm.get('capacity')?.hasError('required')">
+                    Capacity is mandatory</mat-error>
+            </mat-form-field>
+
+            <div class="button">
+                <a mat-button (click)="backToRooms()">Back to Rooms</a>
+                <button type="submit" mat-button [disabled]="!roomForm.valid" 
+                    (click)="createRoom()">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

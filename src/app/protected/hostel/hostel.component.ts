@@ -6,7 +6,7 @@ import { ProtectedService } from '../protected.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Hostel, Response } from 'src/app/public/interfaces';
 
@@ -54,7 +54,7 @@ export class HostelComponent implements AfterViewInit {
     const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
+        if (this.response.error) {
           tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
@@ -82,7 +82,7 @@ export class HostelComponent implements AfterViewInit {
     }
   }
 
-  createHostel(){
+  createHostel() {
     this.router.navigate(['create-hostel']);
   }
 
@@ -91,39 +91,59 @@ export class HostelComponent implements AfterViewInit {
   }
 
   deleteHostel(hostel: Hostel) {
-    let url = environment.API_URL + '/api/v1/hostel/delete-hostel/';
-    const name = 'Delete ' + hostel.name + ' ' + '?';
-    if(window.confirm('Are you sure you want to delete the hostel ' +hostel.name + '?')){
-      return this.protectedService.deleteRecord(url+hostel.id).subscribe(
-        (data) => {
-          this.response = data;
-          if(this.response.error) {
-            tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
-              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
-            }))
-          } else {
-            this.deleteRowDataTable (hostel.id,  this.paginator, this.dataSource);
-          }
-        },
-        (error) => {
-          console.log('Error while trying to fetch all hostels');
-          tap(() => this.snackbar.open(error, 'Close', {
+    this.protectedService.getAllRoomsByHostelId(environment.API_URL + '/api/v1/room/rooms-by-hostel-id', hostel.id).subscribe(
+      (data) => {
+        this.response = data;
+        if (this.response.error) {
+          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
+          return of(false);
+        } else if (this.response.data != null && this.response.data.length > 0) {
+          console.log(this.response.data.length);
+          if (this.response.data.length > 0) {
+            this.snackbar.open('Hostel is not empty. Cannot be deleted.', 'Close', {
+              duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
+            });
+            return of(false);
+          }
+        } else {
+          let url = environment.API_URL + '/api/v1/hostel/delete-hostel/';
+          const name = 'Delete ' + hostel.name + ' ' + '?';
+          if (window.confirm('Are you sure you want to delete the hostel ' + hostel.name + '?')) {
+            return this.protectedService.deleteRecord(url + hostel.id).subscribe(
+              (data) => {
+                this.response = data;
+                if (this.response.error) {
+                  tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+                    duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+                  }))
+                } else {
+                  this.deleteRowDataTable(hostel.id, this.paginator, this.dataSource);
+                }
+              },
+              (error) => {
+                console.log('Error while trying to fetch all hostels');
+                tap(() => this.snackbar.open(error, 'Close', {
+                  duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+                }))
+              }
+            );
+          }
         }
-      );
-    }
+      }
+    );
   }
 
-  private deleteRowDataTable (recordId:number, paginator: any, dataSource: any) {
-    const itemIndex = dataSource.data.findIndex((obj:any) => obj['id'] === recordId);
+  private deleteRowDataTable(recordId: number, paginator: any, dataSource: any) {
+    const itemIndex = dataSource.data.findIndex((obj: any) => obj['id'] === recordId);
     dataSource.data.splice(itemIndex, 1);
     dataSource.paginator = paginator;
   }
 
-  gotoRooms(_hostelId: any){
-      localStorage.setItem(LOCALSTORAGE_HOSTEL_ID, _hostelId);
-      this.router.navigate(['room']);
+  gotoRooms(_hostelId: any) {
+    localStorage.setItem(LOCALSTORAGE_HOSTEL_ID, _hostelId);
+    this.router.navigate(['room']);
   }
 
   gotoExpenses(_hostelId: any) {

@@ -1,7 +1,7 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_ROOM_ID, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 import { Tenant, Response } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
@@ -29,8 +29,7 @@ export class TenantComponent {
     } else {
       (this.selectedRoomId == undefined)
         ? this.getAllTenantsByUserId()
-        : this.getAllTenantsByRoomId(this.selectedRoomId);
-      ;
+        : this.getAllTenantsByRoomId(Number(this.selectedRoomId));
     }
   }
 
@@ -73,7 +72,7 @@ export class TenantComponent {
     return tenants;
   }
 
-  getAllTenantsByRoomId(roomId: any) {
+  getAllTenantsByRoomId(roomId: number) {
     let url = environment.API_URL + '/api/v1/tenant/tenants-by-room-id';
     const tenants = this.protectedService.getAllTenantsByRoomId(url, roomId).subscribe(
       (data) => {
@@ -102,12 +101,42 @@ export class TenantComponent {
   }
 
   addTenant(){
-
+    this.router.navigate(['create-update-tenant']);
   }
 
   deleteTenant(tenant: Tenant) {
-    console.log(tenant);
+    if(window.confirm('Are you sure you want to delete the Tenant of ' + tenant.firstName + ' '+ tenant.middleName + ' '+ tenant.lastName + '?')){
+      this.protectedService.deleteRecord(environment.API_URL+'/api/v1/tenant/delete-tenant-by-id/'+tenant.id).subscribe(
+        (data) => {
+          if(data.error!= null && data.error.length > 0) {
+            this.snackbar.open(data.error[0].message, 'Close', {
+              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            });
+            return of(false);
+          } else {
+            this.deleteRowDataTable (tenant.id,  this.paginator, this.dataSource);
+            this.snackbar.open(data.data, 'Close', {
+              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            });
+          }
+        },
+        (error) => {
+          console.error('Error while trying to delete tenant');
+          tap(() => this.snackbar.open(error, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        }
+      );
+    }
   }
+  
+  private deleteRowDataTable (recordId:number, paginator: any, dataSource: any) {
+    const itemIndex = dataSource.data.findIndex((obj:any) => obj['id'] === recordId);
+    dataSource.data.splice(itemIndex, 1);
+    dataSource.paginator = paginator;
+  }
+
+
   modifyTenant(tenant: Tenant) {
     console.log(tenant);
   }

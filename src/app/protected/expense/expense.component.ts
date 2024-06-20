@@ -1,7 +1,7 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { LOCALSTORAGE_CURRENT_USER, LOCALSTORAGE_HOSTEL_ID, LOCALSTORAGE_TOKEN_KEY } from 'src/app/constants';
 import { Expense, Response } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
@@ -98,12 +98,41 @@ export class ExpenseComponent {
   }
 
   addExpense(){
-
+    this.router.navigate(['create-update-expense']);
   }
 
   deleteExpense(expense: Expense) {
-    console.log(expense);
+    if(window.confirm('Are you sure you want to delete the Expense with id ' + expense.id + '?')){
+      this.protectedService.deleteRecord(environment.API_URL+'/api/v1/expense/delete-expense/'+expense.id).subscribe(
+        (data) => {
+          if(data.error!= null && data.error.length > 0) {
+            this.snackbar.open(data.error[0].message, 'Close', {
+              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            });
+            return of(false);
+          } else {
+            this.deleteRowDataTable (expense.id,  this.paginator, this.dataSource);
+            this.snackbar.open(data.data, 'Close', {
+              duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            });
+          }
+        },
+        (error) => {
+          console.error('Error while trying to delete expense');
+          tap(() => this.snackbar.open(error, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          }))
+        }
+      );
+    }
   }
+  
+  private deleteRowDataTable (recordId:number, paginator: any, dataSource: any) {
+    const itemIndex = dataSource.data.findIndex((obj:any) => obj['id'] === recordId);
+    dataSource.data.splice(itemIndex, 1);
+    dataSource.paginator = paginator;
+  }
+
   modifyExpense(expense: Expense) {
     console.log(expense);
   }
