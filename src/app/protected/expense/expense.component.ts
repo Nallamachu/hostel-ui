@@ -25,6 +25,7 @@ export class ExpenseComponent {
   selectedHostelId = localStorage.getItem(LOCALSTORAGE_HOSTEL_ID);
 
   ngOnInit() {
+    this.protectedService.expenseToModify = undefined;
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
@@ -41,7 +42,7 @@ export class ExpenseComponent {
 
   response: Response = {
     data: [],
-    error: []
+    errors: []
   };
 
   expenses: Expense[] = []
@@ -54,8 +55,8 @@ export class ExpenseComponent {
     const expenses = this.protectedService.getAllExpensesByUserId(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -78,8 +79,8 @@ export class ExpenseComponent {
     const expenses = this.protectedService.getAllExpensesByHostelId(url, selectedHostelId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -105,8 +106,8 @@ export class ExpenseComponent {
     if(window.confirm('Are you sure you want to delete the Expense with id ' + expense.id + '?')){
       this.protectedService.deleteRecord(environment.API_URL+'/api/v1/expense/delete-expense/'+expense.id).subscribe(
         (data) => {
-          if(data.error!= null && data.error.length > 0) {
-            this.snackbar.open(data.error[0].message, 'Close', {
+          if(data.errors!= null && data.errors.length > 0) {
+            this.snackbar.open(data.errors[0].message, 'Close', {
               duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
             });
             return of(false);
@@ -134,7 +135,8 @@ export class ExpenseComponent {
   }
 
   modifyExpense(expense: Expense) {
-    console.log(expense);
+    this.protectedService.expenseToModify = expense;
+    this.router.navigate(['create-update-expense']);
   }
 
   applyFilter(event: Event) {

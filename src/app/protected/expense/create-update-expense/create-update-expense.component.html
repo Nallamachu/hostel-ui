@@ -1,13 +1,17 @@
 <mat-card class="mat-card">
-    <mat-card-title>Create Expense</mat-card-title>
+    <mat-card-title>{{(expenseToModify!=undefined)?"Modify Expense":"Create Expense"}}</mat-card-title>
     <mat-card-content class="mat-card-content">
         <form [formGroup]="expenseForm" class="form">
 
-            <mat-form-field class="mat-form-field">
+            <mat-form-field class="mat-form-field" *ngIf="expenseToModify==undefined">
                 <mat-label>Select Hostel</mat-label>
                 <mat-select formControlName="hostel" name="hostel">
                     <mat-option *ngFor="let hostel of hostels;" [value]="hostel">{{hostel.name}}</mat-option>
                 </mat-select>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field" *ngIf="expenseToModify != undefined">
+                <mat-label>Hostel Name</mat-label>
+                <input type="text" matInput readonly placeholder="Enter Hostel Name" formControlName="hostel">
             </mat-form-field>
 
             <mat-form-field class="mat-form-field">
@@ -40,7 +44,7 @@
             <div class="button">
                 <a mat-button (click)="backToExpenses()">Back to Expenses</a>
                 <button type="submit" mat-button [disabled]="!expenseForm.valid" 
-                    (click)="createExpense()">Submit</button>
+                    (click)="createOrModifyExpense()">Submit</button>
             </div>
         </form>
     </mat-card-content>

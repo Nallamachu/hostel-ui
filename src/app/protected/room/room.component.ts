@@ -26,6 +26,7 @@ export class RoomComponent {
   selectedHostelId = localStorage.getItem(LOCALSTORAGE_HOSTEL_ID);
 
   ngOnInit() {
+    this.protectedService.roomToModify = undefined;
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
@@ -42,7 +43,7 @@ export class RoomComponent {
 
   response: Response = {
     data: [],
-    error: []
+    errors: []
   };
   
   rooms: Room[] = []
@@ -54,8 +55,8 @@ export class RoomComponent {
     const rooms = this.protectedService.getAllRoomsByHostelId(url, hostelId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -79,8 +80,8 @@ export class RoomComponent {
     const rooms = this.protectedService.getAllRoomsByUserId(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -115,8 +116,8 @@ export class RoomComponent {
     this.protectedService.getAllTenantsByRoomNo(environment.API_URL+'/api/v1/tenant/tenants-by-room-no', room.roomNo).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
           return of(false);
@@ -132,8 +133,8 @@ export class RoomComponent {
           if(window.confirm('Are you sure you want to delete the room of ' + room.roomNo + '?')){
             return this.protectedService.deleteRecord(url+room.id).subscribe(
               (data) => {
-                if(data.error) {
-                  tap(() => this.snackbar.open(data.error[0].message, 'Close', {
+                if(data.errors) {
+                  tap(() => this.snackbar.open(data.errors[0].message, 'Close', {
                     duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
                   }))
                 } else {
@@ -160,7 +161,8 @@ export class RoomComponent {
   }
 
   modifyRoom(room: Room) {
-    console.log(room);
+    this.protectedService.roomToModify = room;
+    this.router.navigate(['create-update-room']);
   }
 
   gotoTenants(roomId:any) {

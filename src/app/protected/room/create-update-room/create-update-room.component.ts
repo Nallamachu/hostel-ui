@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CreateUpdateRoomComponent {
   public roomForm: FormGroup;
   hostels!: Hostel[];
+  roomToModify!: Room | undefined;
   
   ngOnInit() {
     this.getHostels();
@@ -29,23 +30,65 @@ export class CreateUpdateRoomComponent {
   ) {
     this.roomForm = new FormGroup(
       {
+        id: new FormControl(),
         roomNo: new FormControl(null, [Validators.required]),
         floorNo: new FormControl(null, [Validators.required]),
         capacity: new FormControl(null, [Validators.required]),
         hostel: new FormControl(null, [Validators.required])
       }
-    )
+    );
+    if(protectedService.roomToModify != null){
+      this.roomToModify = protectedService.roomToModify;
+      this.fillTheForm(this.roomToModify);
+    }
   }
 
-  async createRoom() {
+  fillTheForm(room: Room){
+    this.roomForm.setValue({
+      id:room.id,
+      roomNo: room.roomNo,
+      floorNo: room.floorNo,
+      capacity: room.capacity,
+      hostel: room.hostel.name
+    });
+  }
+
+  createOrModifyRoom() {
     if(this.roomForm.invalid)
       return;
 
+    if(this.roomForm.value.id != null || this.roomForm.value.id != undefined){
+      this.modifyRoom();
+    } else {
+      this.createRoom();
+    }
+  }
+
+  async modifyRoom() {
+    let room = this.getRoomObject(this.roomForm.value);
+    this.protectedService.updateRecord(environment.API_URL + '/api/v1/room/modify-room/'+ room.id, room).pipe(
+      tap((res: Response) => {
+        if (res.errors) {
+          this.snackbar.open(res.errors[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          });
+        } else {
+          this.router.navigate(['room']);
+          this.snackbar.open('Room Modified Successfully', 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          });
+          this.protectedService.roomToModify = undefined;
+        }
+      })
+    ).subscribe();
+  }
+
+  async createRoom() {
     const room = this.getRoomObject(this.roomForm.value);
     this.protectedService.createHostel(environment.API_URL + '/api/v1/room/create-room', room).pipe(
       tap((res: Response) => {
-        if (res.error != null && res.error.length > 0) {
-          tap(() => this.snackbar.open(res.error[0].message, 'Close', {
+        if (res.errors != null && res.errors.length > 0) {
+          tap(() => this.snackbar.open(res.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }));
         } else {
@@ -63,8 +106,8 @@ export class CreateUpdateRoomComponent {
     let url = environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user-no-pagination';
     const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
       (data) => {
-        if(data.error) {
-          tap(() => this.snackbar.open(data.error[0].message, 'Close', {
+        if(data.errors) {
+          tap(() => this.snackbar.open(data.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -86,13 +129,14 @@ export class CreateUpdateRoomComponent {
       roomNo: value.roomNo,
       floorNo: value.floorNo,
       capacity: value.capacity,
-      id: 0,
-      hostel: value.hostel
+      id: value.id,
+      hostel: (this.roomToModify == undefined) ? value.hostel : this.roomToModify?.hostel
     }
     return _room;
   }
 
   backToRooms() {
+    this.protectedService.roomToModify = undefined;
     this.router.navigate(['room']);
   }
 

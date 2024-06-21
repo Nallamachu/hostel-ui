@@ -24,6 +24,7 @@ export class TenantComponent {
   selectedRoomId = localStorage.getItem(LOCALSTORAGE_ROOM_ID);
 
   ngOnInit() {
+    this.protectedService.tenantToModify = undefined;
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined ) {
       this.router.navigate(['login']);
     } else {
@@ -40,7 +41,7 @@ export class TenantComponent {
 
   response: Response = {
     data: [],
-    error: []
+    errors: []
   };
 
   tenants: Tenant[] = []
@@ -53,8 +54,8 @@ export class TenantComponent {
     const tenants = this.protectedService.getAllTenantsByUserId(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -77,8 +78,8 @@ export class TenantComponent {
     const tenants = this.protectedService.getAllTenantsByRoomId(url, roomId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -108,8 +109,8 @@ export class TenantComponent {
     if(window.confirm('Are you sure you want to delete the Tenant of ' + tenant.firstName + ' '+ tenant.middleName + ' '+ tenant.lastName + '?')){
       this.protectedService.deleteRecord(environment.API_URL+'/api/v1/tenant/delete-tenant-by-id/'+tenant.id).subscribe(
         (data) => {
-          if(data.error!= null && data.error.length > 0) {
-            this.snackbar.open(data.error[0].message, 'Close', {
+          if(data.errors!= null && data.errors.length > 0) {
+            this.snackbar.open(data.errors[0].message, 'Close', {
               duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
             });
             return of(false);
@@ -138,7 +139,8 @@ export class TenantComponent {
 
 
   modifyTenant(tenant: Tenant) {
-    console.log(tenant);
+    this.protectedService.tenantToModify = tenant;
+    this.router.navigate(['create-update-tenant']);
   }
 
   applyFilter(event: Event) {

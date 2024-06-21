@@ -22,6 +22,7 @@ export class HostelComponent implements AfterViewInit {
   //@ViewChild(MatSort)  sorter: MatSort = new MatSort;
 
   ngOnInit() {
+    this.protectedService.hostelToModify = undefined;
     if (localStorage.getItem(LOCALSTORAGE_TOKEN_KEY) == undefined) {
       this.router.navigate(['login']);
     } else {
@@ -46,7 +47,7 @@ export class HostelComponent implements AfterViewInit {
   allHostels: Hostel[] = [];
   response: Response = {
     data: [],
-    error: []
+    errors: []
   };
   getHostels() {
     var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
@@ -54,8 +55,8 @@ export class HostelComponent implements AfterViewInit {
     const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if (this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if (this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -95,8 +96,8 @@ export class HostelComponent implements AfterViewInit {
     this.protectedService.getAllRoomsByHostelId(environment.API_URL + '/api/v1/room/rooms-by-hostel-id', hostel.id).subscribe(
       (data) => {
         this.response = data;
-        if (this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if (this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
           return of(false);
@@ -115,8 +116,8 @@ export class HostelComponent implements AfterViewInit {
             return this.protectedService.deleteRecord(url + hostel.id).subscribe(
               (data) => {
                 this.response = data;
-                if (this.response.error) {
-                  tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+                if (this.response.errors) {
+                  tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
                     duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
                   }))
                 } else {

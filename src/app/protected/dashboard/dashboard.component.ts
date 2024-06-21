@@ -42,7 +42,7 @@ export class DashboardComponent {
 
   response: Response = {
     data: [],
-    error: []
+    errors: []
   }
 
   getAllHostels() {
@@ -51,8 +51,8 @@ export class DashboardComponent {
     const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -75,8 +75,8 @@ export class DashboardComponent {
     const rooms = this.protectedService.getAllRoomsByUserId(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -99,8 +99,8 @@ export class DashboardComponent {
     const tenants = this.protectedService.getAllTenantsByUserId(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {
@@ -123,8 +123,8 @@ export class DashboardComponent {
     const expenses = this.protectedService.getAllExpensesByUserId(url, userId).subscribe(
       (data) => {
         this.response = data;
-        if(this.response.error) {
-          tap(() => this.snackbar.open(this.response.error[0].message, 'Close', {
+        if(this.response.errors) {
+          tap(() => this.snackbar.open(this.response.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
         } else {

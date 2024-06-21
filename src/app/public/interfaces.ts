@@ -96,7 +96,7 @@ export interface Error {
 
 export interface Response {
   data: any,
-  error: Error []
+  errors: Error []
 }
 
 export interface Room {

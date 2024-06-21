@@ -78,17 +78,18 @@ export class CreateUpdateHostelComponent {
 
   async modifyHostel() {
     const hostel = this.getHostelObject(this.createHostelForm.value);
-    this.protectedService.updateHostel(environment.API_URL + '/api/v1/hostel/modify-hostel/'+ hostel.id, hostel).pipe(
+    this.protectedService.updateRecord(environment.API_URL + '/api/v1/hostel/modify-hostel/'+ hostel.id, hostel).pipe(
       tap((res: Response) => {
-        if (res.error) {
-          tap(() => this.snackbar.open(res.error[0].message, 'Close', {
+        if (res.errors) {
+          this.snackbar.open(res.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
-          }));
+          });
         } else {
-          tap(() => this.snackbar.open('Hostel Modified Successfully', 'Close', {
-            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
-          }));
           this.router.navigate(['hostel']);
+          this.snackbar.open('Hostel Modified Successfully', 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          });
+          this.protectedService.hostelToModify = undefined;
         }
       })
     ).subscribe();
@@ -99,12 +100,12 @@ export class CreateUpdateHostelComponent {
     hostel.owner.id = Number(localStorage.getItem(LOCALSTORAGE_CURRENT_USER));
     this.protectedService.createHostel(environment.API_URL + '/api/v1/hostel/create-hostel', hostel).pipe(
       tap((res: Response) => {
-        if (res.error) {
-          tap(() => this.snackbar.open(res.error[0].message, 'Close', {
+        if (res.errors) {
+          tap(() => this.snackbar.open(res.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }));
         } else {
-          tap(() => this.snackbar.open('Hostel Crated Successfully', 'Close', {
+          tap(() => this.snackbar.open('Hostel Created Successfully', 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }));
           this.router.navigate(['hostel']);
@@ -136,6 +137,7 @@ export class CreateUpdateHostelComponent {
   }
 
   backToHostels() {
+    this.protectedService.hostelToModify = undefined;
     this.router.navigate(['hostel']);
   }
 

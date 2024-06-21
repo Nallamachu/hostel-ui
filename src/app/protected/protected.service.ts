@@ -4,17 +4,28 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Expense, Hostel, Response, Room, Tenant } from '../public/interfaces';
 import { Observable } from 'rxjs';
+import { RefreshToken } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProtectedService {
-  hostelToModify!: Hostel;
+  //Current User Information
+  authToken : string | undefined;
+  refreshToken: RefreshToken | undefined;
+
+  //These properties used for respective modules update
+  hostelToModify!: Hostel | undefined | null;
+  roomToModify!: Room | undefined | null;
+  tenantToModify!: Tenant | undefined | null;
+  expenseToModify!: Expense | undefined | null;
 
   constructor(private httpClient: HttpClient,
     private snackbar: MatSnackBar,
     private jwtService: JwtHelperService
-  ) { }
+  ) {
+    
+  }
 
   getHostels(url: string, userId: number) {
     let params = new HttpParams();
@@ -35,8 +46,8 @@ export class ProtectedService {
     return this.httpClient.post<Response>(url, hostel);
   }
 
-  updateHostel(url: string, hostel:any) : Observable<Response>{
-    return this.httpClient.put<Response>(url, hostel);
+  updateRecord(url: string, value:any) : Observable<Response>{
+    return this.httpClient.put<Response>(url, value);
   }
 
   deleteRecord(url: string) {

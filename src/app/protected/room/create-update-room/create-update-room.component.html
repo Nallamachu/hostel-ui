@@ -1,25 +1,33 @@
 <mat-card class="mat-card">
-    <mat-card-title>Create Room</mat-card-title>
+    <mat-card-title>{{(roomToModify != undefined)?'Modify Room':'Create Room'}}</mat-card-title>
     <mat-card-content class="mat-card-content">
         <form [formGroup]="roomForm" class="form">
 
-            <mat-form-field class="mat-form-field">
-                <mat-label>Hostel</mat-label>
+            <mat-form-field class="mat-form-field" *ngIf="roomToModify == undefined">
+                <mat-label>Select Hostel</mat-label>
                 <mat-select formControlName="hostel" name="hostel">
                     <mat-option *ngFor="let hostel of hostels;" [value]="hostel">{{hostel.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
+            <mat-form-field class="mat-form-field" *ngIf="roomToModify != undefined">
+                <mat-label>Hostel Name</mat-label>
+                <input matInput readonly placeholder="Hostel Name" formControlName="hostel">
+                <mat-error
+                    *ngIf="this.roomForm.get('hostel')?.touched && this.roomForm.get('hostel')?.hasError('required')">
+                    Hostel is mandatory</mat-error>
+            </mat-form-field>
+
             <mat-form-field class="mat-form-field">
-                <mat-label>Room No#</mat-label>
-                <input type="number" matInput placeholder="Room No" formControlName="roomNo">
+                <mat-label>Room No</mat-label>
+                <input type="number" matInput readonly="{{(roomToModify!=undefined)?true:false}}" placeholder="Room No" formControlName="roomNo">
                 <mat-error
                     *ngIf="this.roomForm.get('roomNo')?.touched && this.roomForm.get('roomNo')?.hasError('required')">
                     Room No is mandatory</mat-error>
             </mat-form-field>
 
             <mat-form-field class="mat-form-field">
-                <mat-label>Floor No#</mat-label>
+                <mat-label>Floor No</mat-label>
                 <input type="number" matInput placeholder="Floor No" formControlName="floorNo">
                 <mat-error
                     *ngIf="this.roomForm.get('floorNo')?.touched && this.roomForm.get('floorNo')?.hasError('required')">
@@ -37,7 +45,7 @@
             <div class="button">
                 <a mat-button (click)="backToRooms()">Back to Rooms</a>
                 <button type="submit" mat-button [disabled]="!roomForm.valid" 
-                    (click)="createRoom()">Submit</button>
+                    (click)="createOrModifyRoom()">Submit</button>
             </div>
         </form>
     </mat-card-content>

@@ -17,6 +17,7 @@ import { DateAdapter } from '@angular/material/core';
 })
 export class CreateUpdateTenantComponent {
   public tenantForm: FormGroup;
+  tenantToModify!: Tenant | undefined;
 
   rooms: any = [];
   filteredRooms: any = [];
@@ -30,7 +31,13 @@ export class CreateUpdateTenantComponent {
   ];
 
   ngOnInit() {
-    this.getHostelAndRoomDetails();
+    if(this.tenantToModify != undefined && this.tenantToModify.room != undefined 
+      && this.tenantToModify.room.hostel != undefined) {
+        this.hostels.push(this.tenantToModify.room.hostel);
+        this.getAllRoomsByHostelId(this.tenantToModify.room.hostel.id);
+    } else {
+      this.getHostelAndRoomDetails();
+    }
   }
 
   constructor(
@@ -40,31 +47,95 @@ export class CreateUpdateTenantComponent {
     private dateAdapter: DateAdapter<Date>
   ) {
     this.dateAdapter.setLocale('en-IN');
+    if (protectedService.tenantToModify != null) {
+      this.tenantToModify = protectedService.tenantToModify;
+    }
     this.tenantForm = new FormGroup(
       {
-        hostel: new FormControl(null, [Validators.required]),
-        room: new FormControl(null, [Validators.required]),
-        firstName: new FormControl(null, [Validators.required]),
-        middleName: new FormControl(null, []),
-        lastName: new FormControl(null, [Validators.required]),
-        mobile: new FormControl(null, [Validators.required]),
-        idNumber: new FormControl(null, [Validators.required]),
-        idType: new FormControl(null, [Validators.required]),
-        entryDate: new FormControl(null, [Validators.required]),
-        exitDate: new FormControl(null, []),
-        isActive: new FormControl(null, []),
+        id: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.id:0),
+        hostel: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.room.hostel.name:null, 
+          [Validators.required]),
+        room: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.room:null, 
+          [Validators.required]),
+        firstName: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.firstName:null, 
+          [Validators.required]),
+        middleName: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.middleName:null, []),
+        lastName: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.lastName:null, 
+          [Validators.required]),
+        mobile: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.mobile:null, 
+          [Validators.required]),
+        idNumber: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.idNumber:null, 
+          [Validators.required]),
+        idType: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.idType:null, 
+          [Validators.required]),
+        entryDate: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.entryDate:null, 
+          [Validators.required]),
+        exitDate: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.exitDate:null, []),
+        isActive: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.isActive:false, []),
         //ADDRESS
-        street: new FormControl(null, [Validators.required]),
-        city: new FormControl(null, [Validators.required]),
-        state: new FormControl(null, [Validators.required]),
-        country: new FormControl(null, [Validators.required]),
-        zipcode: new FormControl(null, [Validators.required])
+        street: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.address.street:null, 
+          [Validators.required]),
+        city: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.address.city:null, 
+          [Validators.required]),
+        state: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.address.state:null, 
+          [Validators.required]),
+        country: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.address.country:null, 
+          [Validators.required]),
+        zipcode: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.address.zipcode:null, 
+          [Validators.required])
       }
-    )
+    );
+  }
+
+  createOrModifyTenant() {
+    if (this.tenantForm.invalid)
+      return;
+
+    if (this.tenantForm.value.id != null || this.tenantForm.value.id != undefined) {
+      this.modifyTenant();
+    } else {
+      this.createTenant();
+    }
+  }
+
+  async modifyTenant() {
+    let tenant = this.getTenantObject(this.tenantForm.value);
+    this.protectedService.updateRecord(environment.API_URL + '/api/v1/tenant/modify-tenant/' + tenant.id, tenant)
+    .pipe(
+      tap((res: Response) => {
+        if (res.errors) {
+          this.snackbar.open(res.errors[0].message, 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          });
+        } else {
+          this.router.navigate(['tenant']);
+          this.snackbar.open('Tenant Modified Successfully', 'Close', {
+            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          });
+          this.protectedService.tenantToModify = undefined;
+        }
+      })
+    ).subscribe();
+  }
+
+  getAllRoomsByHostelId(hostelId: number) {
+    this.protectedService.getAllRoomsByHostelId(environment.API_URL + '/api/v1/room/rooms-by-hostel-id', hostelId)
+    .subscribe(
+      (roomsData) => {
+        this.filteredRooms = roomsData.data;
+        if (this.filteredRooms == null || this.filteredRooms.length == 0) {
+          this.snackbar.open('No Rooms Found For Given Hostel Id ' + hostelId, 'Close', {
+            duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
+          });
+          return of(false);
+        }
+      }
+    );
   }
 
   getHostelAndRoomDetails() {
-    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
+    var userId = Number((localStorage.getItem(LOCALSTORAGE_CURRENT_USER) !== null) 
+      ? localStorage.getItem(LOCALSTORAGE_CURRENT_USER) : "0");
     this.protectedService.getAllHostelsByUser(environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user-no-pagination', userId).subscribe(
       (data) => {
         this.hostels = data.data;
@@ -74,26 +145,26 @@ export class CreateUpdateTenantComponent {
           });
           return of(false);
         } else {
-          this.protectedService.getAllRoomsByUserId(environment.API_URL + '/api/v1/room/rooms-by-user-id', userId).subscribe(
-            (roomsData) => {
-              this.rooms = roomsData.data;
-              if (this.rooms == null) {
-                this.snackbar.open('No Rooms Found. Create New Room.', 'Close', {
-                  duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
-                });
-                return of(false);
+          this.protectedService.getAllRoomsByUserId(environment.API_URL + '/api/v1/room/rooms-by-user-id', userId)
+            .subscribe(
+              (roomsData) => {
+                this.rooms = roomsData.data;
+                if (this.rooms == null) {
+                  this.snackbar.open('No Rooms Found. Create New Room.', 'Close', {
+                    duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
+                  });
+                  return of(false);
+                }
               }
-            }
-          );
+            );
         }
       }
     );
   }
 
-  filterRooms(hostelId : number) {
-    console.log(hostelId);
+  filterRooms(hostelId: number) {
     this.filteredRooms = [];
-    if(hostelId != null){
+    if (hostelId > 0) {
       for (var i = 0; i < this.rooms.length; i++) {
         if (this.rooms[i].hostel.id == hostelId) {
           this.filteredRooms.push(this.rooms[i]);
@@ -104,7 +175,7 @@ export class CreateUpdateTenantComponent {
         duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
       })
     }
-    
+
     return this.filteredRooms;
   }
 
@@ -115,8 +186,8 @@ export class CreateUpdateTenantComponent {
     const tenant = this.getTenantObject(this.tenantForm.value);
     this.protectedService.createTenant(environment.API_URL + '/api/v1/tenant/create-tenant', tenant).pipe(
       tap((res: Response) => {
-        if (res.error) {
-          tap(() => this.snackbar.open(res.error[0].message, 'Close', {
+        if (res.errors) {
+          tap(() => this.snackbar.open(res.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }));
         } else {
@@ -127,12 +198,11 @@ export class CreateUpdateTenantComponent {
         }
       })
     ).subscribe();
-    console.log(tenant);
   }
 
   getTenantObject(value: any) {
     const _tenant: Tenant = {
-      id: 0,
+      id: value.id,
       firstName: value.firstName,
       middleName: value.middleName,
       lastName: value.lastName,
@@ -141,7 +211,7 @@ export class CreateUpdateTenantComponent {
       idType: value.idType,
       entryDate: value.entryDate,
       exitDate: value.exitDate,
-      isActive: true,
+      isActive: value.isActive,
       address: {
         street: value.street,
         city: value.city,
@@ -156,6 +226,7 @@ export class CreateUpdateTenantComponent {
   }
 
   backToTenants() {
+    this.protectedService.tenantToModify = undefined;
     this.router.navigate(['tenant']);
   }
 }
