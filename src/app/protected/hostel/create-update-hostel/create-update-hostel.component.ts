@@ -98,7 +98,7 @@ export class CreateUpdateHostelComponent {
   async createHostel() {
     const hostel = this.getHostelObject(this.createHostelForm.value);
     hostel.owner.id = Number(localStorage.getItem(LOCALSTORAGE_CURRENT_USER));
-    this.protectedService.createHostel(environment.API_URL + '/api/v1/hostel/create-hostel', hostel).pipe(
+    this.protectedService.createRecord(environment.API_URL + '/api/v1/hostel/create-hostel', hostel).pipe(
       tap((res: Response) => {
         if (res.errors) {
           tap(() => this.snackbar.open(res.errors[0].message, 'Close', {

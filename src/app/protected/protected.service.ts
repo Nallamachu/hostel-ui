@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Expense, Hostel, Response, Room, Tenant } from '../public/interfaces';
+import { Expense, Hostel, Payment, Response, Room, Tenant } from '../public/interfaces';
 import { Observable } from 'rxjs';
 import { RefreshToken } from '../interfaces';
 
@@ -19,6 +19,7 @@ export class ProtectedService {
   roomToModify!: Room | undefined | null;
   tenantToModify!: Tenant | undefined | null;
   expenseToModify!: Expense | undefined | null;
+  paymentToModify!: Payment | undefined | null;
 
   constructor(private httpClient: HttpClient,
     private snackbar: MatSnackBar,
@@ -42,8 +43,8 @@ export class ProtectedService {
 		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
-  createHostel(url: string, hostel:any) : Observable<Response>{
-    return this.httpClient.post<Response>(url, hostel);
+  createRecord(url: string, payload:any) : Observable<Response>{
+    return this.httpClient.post<Response>(url, payload);
   }
 
   updateRecord(url: string, value:any) : Observable<Response>{
@@ -78,10 +79,6 @@ export class ProtectedService {
 		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
-  createTenant(url: string, tenant: Tenant) {
-    return this.httpClient.post<Response>(url, tenant);
-  }
-
   getAllTenantsByRoomId(url: string, roomId: number) {
     let params = new HttpParams();
     params = params.append('roomId', roomId);
@@ -100,14 +97,15 @@ export class ProtectedService {
 		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
-  getAllExpensesByHostelId(url: string, selectedHostelId: string) {
+  getAllExpensesByHostelId(url: string, selectedHostelId: number) {
     let params = new HttpParams();
     params = params.append('hostelId', selectedHostelId);
 		return this.httpClient.get<Response>(url, {params: params}); 
   }
 
-  createExpense(url: string, expense: Expense) {
-    return this.httpClient.post<Response>(url, expense);
+  getAllPaymentsByTenantId(url: string, tenantId: number) {
+    let params = new HttpParams();
+    params = params.append('tenantId', tenantId);
+		return this.httpClient.get<Response>(url, {params: params}); 
   }
-
 }

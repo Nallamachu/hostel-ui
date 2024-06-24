@@ -22,7 +22,7 @@
     <div *ngIf="rooms != null && rooms.length > 0">
       <mat-card class="flex-me" *ngFor="let room of rooms" >
         <mat-card-header>
-          <mat-card-title>{{room.roomNo}} - {{room.hostel.name}}</mat-card-title>
+          <mat-card-title>{{room.roomNo}} - {{room.hostel.name.toUpperCase()}}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <p>Id: {{room.id}}</p>
@@ -37,7 +37,7 @@
     <div *ngIf="tenants!=null && tenants.length > 0" >
       <mat-card class="flex-me" *ngFor="let tenant of tenants">
         <mat-card-header>
-          <mat-card-title>{{tenant.firstName}}, {{tenant.lastName}}</mat-card-title>
+          <mat-card-title>{{tenant.lastName.toUpperCase()}}, {{tenant.firstName.toUpperCase()}}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <p>Tenant Id: {{tenant.id}}</p>
@@ -55,7 +55,7 @@
     <div *ngIf="expenses != null && expenses.length > 0" >
       <mat-card class="flex-me" *ngFor="let expense of expenses">
         <mat-card-header>
-          <mat-card-title>{{expense.hostel.name}}</mat-card-title>
+          <mat-card-title>{{expense.hostel.name.toUpperCase()}}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <p>Expense Id: {{expense.id}}</p>
@@ -73,7 +73,7 @@
   <div #other_card >
     <mat-card class="flex-me" >
       <mat-card-header>
-        <mat-card-title>No Data Found</mat-card-title>
+        <mat-card-title>"NO DATA FOUND"</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div>

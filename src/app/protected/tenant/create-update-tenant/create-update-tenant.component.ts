@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { of, tap } from 'rxjs';
+import { every, of, tap } from 'rxjs';
 import { LOCALSTORAGE_CURRENT_USER } from 'src/app/constants';
 import { Tenant } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
@@ -180,11 +180,8 @@ export class CreateUpdateTenantComponent {
   }
 
   async createTenant() {
-    if (this.tenantForm.invalid)
-      return;
-
     const tenant = this.getTenantObject(this.tenantForm.value);
-    this.protectedService.createTenant(environment.API_URL + '/api/v1/tenant/create-tenant', tenant).pipe(
+    this.protectedService.createRecord(environment.API_URL + '/api/v1/tenant/create-tenant', tenant).pipe(
       tap((res: Response) => {
         if (res.errors) {
           tap(() => this.snackbar.open(res.errors[0].message, 'Close', {

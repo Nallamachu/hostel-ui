@@ -4,7 +4,8 @@
         <form [formGroup]="tenantForm" class="form">
             <mat-form-field class="mat-form-field" *ngIf="tenantToModify === undefined">
                 <mat-label>Select Hostel</mat-label>
-                <mat-select formControlName="hostel" name="hostel" #hostel (selectionChange)="filterRooms(hostel.value)">
+                <mat-select formControlName="hostel" name="hostel" #hostel
+                    (selectionChange)="filterRooms(hostel.value)">
                     <mat-option *ngFor="let hostel of hostels;" [value]="hostel.id">{{hostel.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
@@ -80,31 +81,31 @@
             </section>
 
             <mat-card-title>Address Details</mat-card-title>
-            <mat-form-field class="mat-form-field" >
+            <mat-form-field class="mat-form-field">
                 <input type="text" matInput placeholder="Street" formControlName="street">
                 <mat-error
                     *ngIf="this.tenantForm.get('street')?.touched && this.tenantForm.get('street')?.hasError('required')">
                     Street is required</mat-error>
             </mat-form-field>
-            <mat-form-field class="mat-form-field" >
+            <mat-form-field class="mat-form-field">
                 <input type="text" matInput placeholder="City" formControlName="city">
                 <mat-error
                     *ngIf="this.tenantForm.get('city')?.touched && this.tenantForm.get('city')?.hasError('required')">
                     City is required</mat-error>
             </mat-form-field>
-            <mat-form-field class="mat-form-field" >
+            <mat-form-field class="mat-form-field">
                 <input type="text" matInput placeholder="State" formControlName="state">
                 <mat-error
                     *ngIf="this.tenantForm.get('state')?.touched && this.tenantForm.get('state')?.hasError('required')">
                     State is required</mat-error>
             </mat-form-field>
-            <mat-form-field class="mat-form-field" >
+            <mat-form-field class="mat-form-field">
                 <input type="text" matInput placeholder="Country" formControlName="country">
                 <mat-error
                     *ngIf="this.tenantForm.get('country')?.touched && this.tenantForm.get('country')?.hasError('required')">
                     Country is required</mat-error>
             </mat-form-field>
-            <mat-form-field class="mat-form-field" >
+            <mat-form-field class="mat-form-field">
                 <input type="text" matInput placeholder="Pincode" formControlName="zipcode">
                 <mat-error
                     *ngIf="this.tenantForm.get('zipcode')?.touched && this.tenantForm.get('zipcode')?.hasError('required')">
@@ -113,8 +114,7 @@
 
             <div class="button">
                 <a mat-button (click)="backToTenants()">Back to Tenants</a>
-                <button type="submit" mat-button [disabled]="!tenantForm.valid" 
-                    (click)="createTenant()">Submit</button>
+                <button type="submit" mat-button [disabled]="!tenantForm.valid" (click)="createOrModifyTenant()">Submit</button>
             </div>
         </form>
     </mat-card-content>

@@ -31,7 +31,7 @@ export class ExpenseComponent {
     } else {
       (this.selectedHostelId == undefined)
         ?this.getAllExpensesByUserId()
-        :this.getAllExpensesByHostelId(this.selectedHostelId);
+        :this.getAllExpensesByHostelId(Number(this.selectedHostelId));
     }
   }
 
@@ -74,7 +74,7 @@ export class ExpenseComponent {
     return expenses;
   }
 
-  getAllExpensesByHostelId(selectedHostelId: string) {
+  getAllExpensesByHostelId(selectedHostelId: number) {
     let url = environment.API_URL + '/api/v1/expense/find-all-expenses-by-hostel-id';
     const expenses = this.protectedService.getAllExpensesByHostelId(url, selectedHostelId).subscribe(
       (data) => {

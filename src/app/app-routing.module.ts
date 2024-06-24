@@ -12,6 +12,8 @@ import { CreateUpdateHostelComponent } from './protected/hostel/create-update-ho
 import { CreateUpdateRoomComponent } from './protected/room/create-update-room/create-update-room.component';
 import { CreateUpdateTenantComponent } from './protected/tenant/create-update-tenant/create-update-tenant.component';
 import { CreateUpdateExpenseComponent } from './protected/expense/create-update-expense/create-update-expense.component';
+import { TenantDetailsComponent } from './protected/tenant/tenant-details/tenant-details.component';
+import { CreateUpdatePaymentComponent } from './protected/tenant/create-update-payment/create-update-payment.component';
 
 const routes: Routes = [
   {
@@ -45,6 +47,14 @@ const routes: Routes = [
   {
     path: 'tenant',
     component: TenantComponent
+  },
+  {
+    path: 'tenant-details',
+    component: TenantDetailsComponent
+  },
+  {
+    path: 'create-update-payment',
+    component: CreateUpdatePaymentComponent
   },
   {
     path: 'create-update-tenant',

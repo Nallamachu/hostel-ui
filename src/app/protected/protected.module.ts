@@ -25,6 +25,9 @@ import { CreateUpdateRoomComponent } from './room/create-update-room/create-upda
 import { CreateUpdateTenantComponent } from './tenant/create-update-tenant/create-update-tenant.component';
 import { CreateUpdateExpenseComponent } from './expense/create-update-expense/create-update-expense.component';
 import { CreateUpdateHostelComponent } from './hostel/create-update-hostel/create-update-hostel.component';
+import { TenantDetailsComponent } from './tenant/tenant-details/tenant-details.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { CreateUpdatePaymentComponent } from './tenant/create-update-payment/create-update-payment.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,9 @@ import { CreateUpdateHostelComponent } from './hostel/create-update-hostel/creat
     CreateUpdateHostelComponent,
     CreateUpdateRoomComponent,
     CreateUpdateTenantComponent,
-    CreateUpdateExpenseComponent
+    CreateUpdateExpenseComponent,
+    TenantDetailsComponent,
+    CreateUpdatePaymentComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +60,8 @@ import { CreateUpdateHostelComponent } from './hostel/create-update-hostel/creat
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatGridListModule
   ]
 })
 export class ProtectedModule { }

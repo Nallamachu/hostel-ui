@@ -1,0 +1,49 @@
+<mat-card class="mat-card">
+    <mat-card-title>{{(paymentToModify != undefined)?'Modify Tenant':'Create Tenant'}}</mat-card-title>
+    <mat-card-content class="mat-card-content">
+        <form [formGroup]="paymentForm" class="form">
+            <mat-form-field class="mat-form-field">
+                <input type="text" readonly matInput placeholder="Tenant Name" formControlName="tenantName">
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Payment Type</mat-label>
+                <mat-select formControlName="paymentType" name="paymentType">
+                    <mat-option *ngFor="let paymentType of paymentTypes;" [value]="paymentType.id">{{paymentType.value}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Transaction Type</mat-label>
+                <mat-select formControlName="transactionType" name="transactionType">
+                    <mat-option *ngFor="let transactionType of transactionTypes;" [value]="transactionType.id">{{transactionType.value}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field">
+                <mat-label>Payment Date (DD/MM/YYYY)</mat-label>
+                <input matInput [matDatepicker]="paymentDate" formControlName="paymentDate">
+                <mat-datepicker-toggle matIconSuffix [for]="paymentDate"></mat-datepicker-toggle>
+                <mat-datepicker #paymentDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <mat-label>Change Tenant Exit Date (DD/MM/YYYY)</mat-label>
+                <input matInput [matDatepicker]="tenantExpiryDate" formControlName="tenantExpiryDate">
+                <mat-datepicker-toggle matIconSuffix [for]="tenantExpiryDate"></mat-datepicker-toggle>
+                <mat-datepicker #tenantExpiryDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="mat-form-field">
+                <input type="number" matInput placeholder="Enter Amount" formControlName="amount">
+                <mat-error
+                    *ngIf="this.paymentForm.get('amount')?.touched && this.paymentForm.get('amount')?.hasError('required')">
+                    Amount is required</mat-error>
+            </mat-form-field>
+
+            <div class="button">
+                <a mat-button (click)="backToTenantDetails()">Tenant Details</a>
+                <button type="submit" mat-button [disabled]="!paymentForm.valid" (click)="createOrModifyPayment()">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

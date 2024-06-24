@@ -131,3 +131,12 @@ export interface Expense {
   "date": string,
   "hostel": Hostel
 }
+
+export interface Payment {
+  "id": number,
+  "paymentType": string,
+  "transactionType":string,
+  "paymentDate": string,
+  "amount": number,
+  "tenant": Tenant
+}

@@ -8,8 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from './public/components/header/header.component';
 import { LoginComponent } from './public/components/login/login.component';
 import { RegisterComponent } from './public/components/register/register.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { JwtModule } from '@auth0/angular-jwt';
 import { FooterComponent } from './public/components/footer/footer.component';
@@ -52,6 +53,7 @@ export function tokenGetter() {
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
+    MatGridListModule,
     MatIconModule,
     MatSnackBarModule,
     MatTableModule,

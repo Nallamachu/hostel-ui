@@ -113,7 +113,7 @@ export class CreateUpdateExpenseComponent {
 
   async createExpense() {
     const expense = this.getExpenseObject(this.expenseForm.value);
-    this.protectedService.createExpense(environment.API_URL + '/api/v1/expense/create-expense', expense).pipe(
+    this.protectedService.createRecord(environment.API_URL + '/api/v1/expense/create-expense', expense).pipe(
       tap((res: Response) => {
         if (res.errors) {
           this.snackbar.open(res.errors[0].message, 'Close', {

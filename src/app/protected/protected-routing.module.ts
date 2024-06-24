@@ -9,6 +9,8 @@ import { ExpenseComponent } from './expense/expense.component';
 import { CreateUpdateRoomComponent } from './room/create-update-room/create-update-room.component';
 import { CreateUpdateTenantComponent } from './tenant/create-update-tenant/create-update-tenant.component';
 import { CreateUpdateExpenseComponent } from './expense/create-update-expense/create-update-expense.component';
+import { TenantDetailsComponent } from './tenant/tenant-details/tenant-details.component';
+import { CreateUpdatePaymentComponent } from './tenant/create-update-payment/create-update-payment.component';
 
 // Routes for child Module (protectedModule). Since protected module is lazy loaded in in the 
 // app-routing.module the full path is `/protected/dashboard`
@@ -40,6 +42,14 @@ const routes: Routes = [
   {
     path: 'create-update-tenant',
     component: CreateUpdateTenantComponent
+  },
+  {
+    path: 'tenant-details',
+    component: TenantDetailsComponent
+  },
+  {
+    path: 'create-update-payment',
+    component: CreateUpdatePaymentComponent
   },
   {
     path: 'expense',

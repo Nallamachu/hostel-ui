@@ -97,8 +97,9 @@ export class TenantComponent {
     return tenants;
   }
 
-  gotoTenantDetails(tenantId:any) {
-    console.log(tenantId);
+  gotoTenantDetails(tenant:Tenant) {
+    this.protectedService.tenantToModify = tenant;
+    this.router.navigate(['tenant-details']);
   }
 
   addTenant(){

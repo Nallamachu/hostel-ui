@@ -85,7 +85,7 @@ export class CreateUpdateRoomComponent {
 
   async createRoom() {
     const room = this.getRoomObject(this.roomForm.value);
-    this.protectedService.createHostel(environment.API_URL + '/api/v1/room/create-room', room).pipe(
+    this.protectedService.createRecord(environment.API_URL + '/api/v1/room/create-room', room).pipe(
       tap((res: Response) => {
         if (res.errors != null && res.errors.length > 0) {
           tap(() => this.snackbar.open(res.errors[0].message, 'Close', {
