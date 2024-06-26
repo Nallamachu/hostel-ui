@@ -104,13 +104,13 @@ export class CreateUpdateTenantComponent {
     .pipe(
       tap((res: Response) => {
         if (res.errors) {
-          this.snackbar.open(res.errors[0].message, 'Close', {
-            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+          this.snackbar.open(res.errors[0].message.substring(0,99), 'Close', {
+            duration: 5000, horizontalPosition: 'center', verticalPosition: 'top'
           });
         } else {
           this.router.navigate(['tenant']);
           this.snackbar.open('Tenant Modified Successfully', 'Close', {
-            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
+            duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
           });
           this.protectedService.tenantToModify = undefined;
         }
@@ -184,14 +184,14 @@ export class CreateUpdateTenantComponent {
     this.protectedService.createRecord(environment.API_URL + '/api/v1/tenant/create-tenant', tenant).pipe(
       tap((res: Response) => {
         if (res.errors) {
-          tap(() => this.snackbar.open(res.errors[0].message, 'Close', {
-            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
-          }));
+          this.snackbar.open(res.errors[0].message.substring(0,99), 'Close', {
+            duration: 5000, horizontalPosition: 'center', verticalPosition: 'top'
+          })
         } else {
-          tap(() => this.snackbar.open('Tenant Created Successfully', 'Close', {
-            duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
-          }));
           this.router.navigate(['tenant']);
+          this.snackbar.open('Tenant Created Successfully', 'Close', {
+            duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
+          })
         }
       })
     ).subscribe();
