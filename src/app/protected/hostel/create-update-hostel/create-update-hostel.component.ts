@@ -17,12 +17,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CreateUpdateHostelComponent {
 
   public createHostelForm: FormGroup;
-  hostelToModify : Hostel | undefined;
+  hostelToModify: Hostel | undefined;
 
   hostelTypes = [
-    {id: 'MEN', value: 'MENS'},
-    {id: 'WOMEN', value: 'WOMENS'},
-    {id: 'COLIVE', value: 'COLIVE'},
+    { id: 'MEN', value: 'MENS' },
+    { id: 'WOMEN', value: 'WOMENS' },
+    { id: 'COLIVE', value: 'COLIVE' },
   ];
 
   constructor(
@@ -30,46 +30,30 @@ export class CreateUpdateHostelComponent {
     private protectedService: ProtectedService,
     private snackbar: MatSnackBar,
   ) {
+    if (protectedService.hostelToModify != null) {
+      this.hostelToModify = protectedService.hostelToModify;
+    }
     this.createHostelForm = new FormGroup(
       {
-        id: new FormControl(),
-        name: new FormControl(null, [Validators.required]),
-        type: new FormControl(null, [Validators.required]),
-        isActive: new FormControl(),
-        street: new FormControl(null, [Validators.required]),
-        city: new FormControl(null, [Validators.required]),
-        state: new FormControl(null, [Validators.required]),
-        country: new FormControl(null, [Validators.required]),
-        zipcode: new FormControl(null, [Validators.required]),
-        owner: new FormControl()
+        id: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.id : 0),
+        name: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.name : null, [Validators.required]),
+        type: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.type : null, [Validators.required]),
+        isActive: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.isActive : false),
+        street: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.street : null, [Validators.required]),
+        city: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.city : null, [Validators.required]),
+        state: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.state : null, [Validators.required]),
+        country: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.country : null, [Validators.required]),
+        zipcode: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.zipcode : null, [Validators.required]),
+        owner: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.owner : null)
       }
     )
-    if(protectedService.hostelToModify != null){
-      this.hostelToModify = protectedService.hostelToModify;
-      this.fillTheForm(this.hostelToModify);
-    }
-  }
-
-  fillTheForm(hostel: Hostel){
-    this.createHostelForm.setValue({
-      id:hostel.id,
-      name: hostel.name,
-      type: hostel.type,
-      isActive: hostel.isActive,
-      street: hostel.address.street,
-      city: hostel.address.city,
-      state: hostel.address.state,
-      country: hostel.address.country,
-      zipcode: hostel.address.zipcode,
-      owner: hostel.owner
-    });
   }
 
   createOrModifyHostel() {
-    if(this.createHostelForm.invalid)
+    if (this.createHostelForm.invalid)
       return;
 
-    if(this.createHostelForm.value.id != null || this.createHostelForm.value.id != undefined){
+    if (this.createHostelForm.value.id > 0) {
       this.modifyHostel();
     } else {
       this.createHostel();
@@ -78,7 +62,7 @@ export class CreateUpdateHostelComponent {
 
   async modifyHostel() {
     const hostel = this.getHostelObject(this.createHostelForm.value);
-    this.protectedService.updateRecord(environment.API_URL + '/api/v1/hostel/modify-hostel/'+ hostel.id, hostel).pipe(
+    this.protectedService.updateRecord(environment.API_URL + '/api/v1/hostel/modify-hostel/' + hostel.id, hostel).pipe(
       tap((res: Response) => {
         if (res.errors) {
           this.snackbar.open(res.errors[0].message, 'Close', {
@@ -114,8 +98,8 @@ export class CreateUpdateHostelComponent {
     ).subscribe();
   }
 
-  getHostelObject(value : any){
-    const _hostel : Hostel = {
+  getHostelObject(value: any) {
+    const _hostel: Hostel = {
       name: value.name,
       type: value.type,
       isActive: value.isActive,
@@ -130,7 +114,7 @@ export class CreateUpdateHostelComponent {
         zipcode: value.zipcode
       },
       owner: (value.owner != null) ? value.owner : {
-        id:0
+        id: 0
       }
     }
     return _hostel;

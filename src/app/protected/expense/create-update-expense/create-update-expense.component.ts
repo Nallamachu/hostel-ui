@@ -20,13 +20,13 @@ export class CreateUpdateExpenseComponent {
   expenseToModify!: Expense | undefined | null;
 
   expenseTypes = [
-    {id: 'RENT', value: 'RENT'},
-    {id: 'SALARY', value: 'SALARY'},
-    {id: 'GROCERIES', value: 'GROCERIES'},
-    {id: 'VEGITABLES', value: 'VEGITABLES'},
-    {id: 'REPAIRS', value: 'REPAIRS'},
-    {id: 'POWER', value: 'POWER'},
-    {id: 'OTHER', value: 'OTHER'}
+    { id: 'RENT', value: 'RENT' },
+    { id: 'SALARY', value: 'SALARY' },
+    { id: 'GROCERIES', value: 'GROCERIES' },
+    { id: 'VEGITABLES', value: 'VEGITABLES' },
+    { id: 'REPAIRS', value: 'REPAIRS' },
+    { id: 'POWER', value: 'POWER' },
+    { id: 'OTHER', value: 'OTHER' }
   ];
 
   ngOnInit() {
@@ -38,20 +38,20 @@ export class CreateUpdateExpenseComponent {
     private protectedService: ProtectedService,
     private snackbar: MatSnackBar,
   ) {
-    if(this.protectedService.expenseToModify != undefined){
+    if (this.protectedService.expenseToModify != undefined) {
       this.expenseToModify = this.protectedService.expenseToModify;
     }
     this.expenseForm = new FormGroup(
       {
-        id: new FormControl((this.expenseToModify!= undefined)? this.expenseToModify.id: null,[]),
-        expenseType: new FormControl((this.expenseToModify!= undefined)? this.expenseToModify.expenseType: null, 
+        id: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.id : 0, []),
+        expenseType: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.expenseType : null,
           [Validators.required]),
-        description: new FormControl((this.expenseToModify!= undefined)? this.expenseToModify.description: null, []),
-        amount: new FormControl((this.expenseToModify!= undefined)? this.expenseToModify.amount: null, 
+        description: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.description : null, []),
+        amount: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.amount : null,
           [Validators.required]),
-        date: new FormControl((this.expenseToModify!= undefined)? this.expenseToModify.date: null, 
+        date: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.date : null,
           [Validators.required]),
-        hostel: new FormControl((this.expenseToModify!= undefined)? this.expenseToModify.hostel.name: null, 
+        hostel: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.hostel.name : null,
           [Validators.required])
       }
     )
@@ -62,7 +62,7 @@ export class CreateUpdateExpenseComponent {
     let url = environment.API_URL + '/api/v1/hostel/find-all-hostels-by-user-no-pagination';
     const hostels = this.protectedService.getAllHostelsByUser(url, userId).subscribe(
       (data) => {
-        if(data.errors) {
+        if (data.errors) {
           tap(() => this.snackbar.open(data.errors[0].message, 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
           }))
@@ -81,10 +81,10 @@ export class CreateUpdateExpenseComponent {
   }
 
   createOrModifyExpense() {
-    if(this.expenseForm.invalid)
+    if (this.expenseForm.invalid)
       return;
 
-    if(this.expenseToModify != undefined) {
+    if (this.expenseForm.value.id > 0) {
       this.modifyExpense();
     } else {
       this.createExpense();
@@ -94,7 +94,7 @@ export class CreateUpdateExpenseComponent {
   async modifyExpense() {
     const expense = this.getExpenseObject(this.expenseForm.value);
     console.log(JSON.stringify(expense));
-    this.protectedService.updateRecord(environment.API_URL + '/api/v1/expense/modify-expense/'+expense.id, expense).pipe(
+    this.protectedService.updateRecord(environment.API_URL + '/api/v1/expense/modify-expense/' + expense.id, expense).pipe(
       tap((res: Response) => {
         if (res.errors) {
           this.snackbar.open(res.errors[0].message, 'Close', {
@@ -123,20 +123,20 @@ export class CreateUpdateExpenseComponent {
           this.router.navigate(['expense']);
           this.snackbar.open('Expense Created Successfully', 'Close', {
             duration: 2000, horizontalPosition: 'center', verticalPosition: 'top'
-          });          
+          });
         }
       })
     ).subscribe();
   }
 
-  getExpenseObject(value : any){
-    const _expense : Expense = {
+  getExpenseObject(value: any) {
+    const _expense: Expense = {
       id: value.id,
       expenseType: value.expenseType,
       description: value.description,
       amount: value.amount,
       date: value.date,
-      hostel: (this.expenseToModify!=undefined)?this.expenseToModify.hostel:value.hostel
+      hostel: (this.expenseToModify != undefined) ? this.expenseToModify.hostel : value.hostel
     }
     return _expense;
   }

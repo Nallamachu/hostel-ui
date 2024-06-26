@@ -91,7 +91,7 @@ export class CreateUpdateTenantComponent {
     if (this.tenantForm.invalid)
       return;
 
-    if (this.tenantForm.value.id != null || this.tenantForm.value.id != undefined) {
+    if (this.tenantForm.value.id > 0) {
       this.modifyTenant();
     } else {
       this.createTenant();
