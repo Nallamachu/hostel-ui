@@ -91,6 +91,12 @@ export class ProtectedService {
 		return this.httpClient.get<Response>(url, {params: params});              
 	}
 
+  getAllActiveTenantsByRoomId(url: string, roomId: number){
+    let params = new HttpParams();
+    params = params.append('roomId', roomId);
+		return this.httpClient.get<Response>(url, {params: params}); 
+  }
+
   getAllExpensesByUserId(url: string, userId: number) {
     let params = new HttpParams();
     params = params.append('userId', userId);
