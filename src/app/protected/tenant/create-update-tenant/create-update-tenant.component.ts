@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { every, of, tap } from 'rxjs';
+import { every, map, of, tap } from 'rxjs';
 import { LOCALSTORAGE_CURRENT_USER } from 'src/app/constants';
 import { Room, Tenant } from 'src/app/public/interfaces';
 import { environment } from 'src/environments/environment';
@@ -29,6 +29,7 @@ export class CreateUpdateTenantComponent {
     { id: 'VOTER ID', value: 'Voter Card' },
     { id: 'PASSPORT', value: 'Passport' }
   ];
+  hasVacancy: boolean = false as boolean;
 
   ngOnInit() {
     if (this.tenantToModify != undefined && this.tenantToModify.room != undefined
@@ -100,12 +101,11 @@ export class CreateUpdateTenantComponent {
 
   async modifyTenant() {
     let tenant = this.getTenantObject(this.tenantForm.value);
-    if(this.isRoomHasVacancy(tenant.room)){
-      this.protectedService.updateRecord(environment.API_URL + '/api/v1/tenant/modify-tenant/' + tenant.id, tenant)
+    this.protectedService.updateRecord(environment.API_URL + '/api/v1/tenant/modify-tenant/' + tenant.id, tenant)
       .pipe(
         tap((res: Response) => {
           if (res.errors) {
-            this.snackbar.open(res.errors[0].message.substring(0, 99), 'Close', {
+            this.snackbar.open((res.errors[0].message.length>100)?res.errors[0].message.substring(0, 99):res.errors[0].message, 'Close', {
               duration: 5000, horizontalPosition: 'center', verticalPosition: 'top'
             });
           } else {
@@ -117,7 +117,6 @@ export class CreateUpdateTenantComponent {
           }
         })
       ).subscribe();
-    }
   }
 
   getAllRoomsByHostelId(hostelId: number) {
@@ -183,22 +182,20 @@ export class CreateUpdateTenantComponent {
 
   async createTenant() {
     const tenant = this.getTenantObject(this.tenantForm.value);
-    if(this.isRoomHasVacancy(tenant.room)){
-      this.protectedService.createRecord(environment.API_URL + '/api/v1/tenant/create-tenant', tenant).pipe(
-        tap((res: Response) => {
-          if (res.errors) {
-            this.snackbar.open(res.errors[0].message.substring(0, 99), 'Close', {
-              duration: 5000, horizontalPosition: 'center', verticalPosition: 'top'
-            })
-          } else {
-            this.router.navigate(['tenant']);
-            this.snackbar.open('Tenant Created Successfully', 'Close', {
-              duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
-            })
-          }
-        })
-      ).subscribe();
-    }
+    this.protectedService.createRecord(environment.API_URL + '/api/v1/tenant/create-tenant', tenant).pipe(
+      tap((res: Response) => {
+        if (res.errors) {
+          this.snackbar.open((res.errors[0].message.length > 100) ? res.errors[0].message.substring(0, 99) : res.errors[0].message, 'Close', {
+            duration: 5000, horizontalPosition: 'center', verticalPosition: 'top'
+          })
+        } else {
+          this.router.navigate(['tenant']);
+          this.snackbar.open('Tenant Created Successfully', 'Close', {
+            duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
+          })
+        }
+      })
+    ).subscribe();
   }
 
   getTenantObject(value: any) {
@@ -231,22 +228,20 @@ export class CreateUpdateTenantComponent {
     this.router.navigate(['tenant']);
   }
 
+  activeTenants: number = 0;
   isRoomHasVacancy(room: Room) {
-    let output = false;
+    this.activeTenants = 0;
+    this.hasVacancy = false as boolean;
     this.protectedService.getAllActiveTenantsByRoomId(environment.API_URL + '/api/v1/tenant/tenants-count-by-room-id', room.id)
       .subscribe(
-        (data) => {
-          const activeTenants = data.data;
-          if (activeTenants >= room.capacity) {
-            this.snackbar.open('Room no '+room.roomNo + ' is full.', 'Close', {
-              duration: 3000, horizontalPosition: 'center', verticalPosition: 'top'
-            });
-            output = false;
-          } else {
-            output = true;
-          }
+        (data: any) => {
+          map((data: Response) => this.activeTenants = data.data)
+          console.log(this.activeTenants);
         }
       );
-    return output;
+    console.log('current active tenants ' + this.activeTenants);
+    if (room.capacity > this.activeTenants) {
+      this.hasVacancy = true as boolean;
+    }
   }
 }

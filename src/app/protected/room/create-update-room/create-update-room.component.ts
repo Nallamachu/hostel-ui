@@ -33,11 +33,11 @@ export class CreateUpdateRoomComponent {
     }
     this.roomForm = new FormGroup(
       {
-        id: new FormControl((this.roomToModify != undefined) ? this.roomToModify.roomNo : 0),
+        id: new FormControl((this.roomToModify != undefined) ? this.roomToModify.id : 0),
         roomNo: new FormControl((this.roomToModify != undefined) ? this.roomToModify.roomNo : null, [Validators.required]),
         floorNo: new FormControl((this.roomToModify != undefined) ? this.roomToModify.floorNo : null, [Validators.required]),
         capacity: new FormControl((this.roomToModify != undefined) ? this.roomToModify.capacity : null, [Validators.required]),
-        hostel: new FormControl((this.roomToModify != undefined) ? this.roomToModify.hostel : null, [Validators.required])
+        hostel: new FormControl((this.roomToModify != undefined) ? this.roomToModify.hostel.name : null, [Validators.required])
       }
     );
   }
