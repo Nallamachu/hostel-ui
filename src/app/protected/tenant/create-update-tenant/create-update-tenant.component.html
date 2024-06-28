@@ -19,7 +19,7 @@
             <mat-form-field class="mat-form-field">
                 <mat-label>Select Room</mat-label>
                 <mat-select formControlName="room" name="room">
-                    <mat-option *ngFor="let room of filteredRooms;" [value]="room">{{room.roomNo}}</mat-option>
+                    <mat-option *ngFor="let room of filteredRooms;" [value]="room.id">{{room.roomNo}}</mat-option>
                 </mat-select>
             </mat-form-field>
 

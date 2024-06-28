@@ -56,7 +56,7 @@ export class CreateUpdateTenantComponent {
         id: new FormControl((this.tenantToModify != undefined) ? this.tenantToModify.id : 0),
         hostel: new FormControl((this.tenantToModify != undefined) ? this.tenantToModify.room.hostel.name : null,
           [Validators.required]),
-        room: new FormControl((this.tenantToModify != undefined) ? this.tenantToModify.room : null,
+        room: new FormControl((this.tenantToModify != undefined) ? this.tenantToModify.room.id : null,
           [Validators.required]),
         firstName: new FormControl((this.tenantToModify != undefined) ? this.tenantToModify.firstName : null,
           [Validators.required]),
@@ -217,7 +217,7 @@ export class CreateUpdateTenantComponent {
         country: value.country,
         zipcode: value.zipcode
       },
-      room: value.room,
+      room: this.filteredRooms.filter((room:any) => room.id == value.room)[0],
       payments: []
     }
     return _tenant;
