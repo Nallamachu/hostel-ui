@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { ProtectedService } from '../../protected.service';
 import { Response } from 'src/app/public/interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Validations } from '../../validations';
 
 @Component({
   selector: 'app-create-update-expense',
@@ -53,6 +54,9 @@ export class CreateUpdateExpenseComponent {
           [Validators.required]),
         hostel: new FormControl((this.expenseToModify != undefined) ? this.expenseToModify.hostel.name : null,
           [Validators.required])
+      },
+      {
+        validators: Validations.validAmount
       }
     )
   }

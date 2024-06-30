@@ -21,26 +21,23 @@
             <mat-form-field class="mat-form-field">
                 <mat-label>Room No</mat-label>
                 <input type="number" matInput readonly="{{(roomToModify!=undefined)?true:false}}" placeholder="Room No" formControlName="roomNo">
-                <mat-error
-                    *ngIf="this.roomForm.get('roomNo')?.touched && this.roomForm.get('roomNo')?.hasError('required')">
-                    Room No is mandatory</mat-error>
             </mat-form-field>
+            <mat-error *ngIf="this.roomForm.get('roomNo')?.touched && (this.roomForm.hasError('roomNo') || this.roomForm.get('roomNo')?.hasError('required'))">
+                Room No value range should be in 1 - 999</mat-error>
 
             <mat-form-field class="mat-form-field">
                 <mat-label>Floor No</mat-label>
                 <input type="number" matInput placeholder="Floor No" formControlName="floorNo">
-                <mat-error
-                    *ngIf="this.roomForm.get('floorNo')?.touched && this.roomForm.get('floorNo')?.hasError('required')">
-                    Floor No is mandatory</mat-error>
             </mat-form-field>
+            <mat-error *ngIf="this.roomForm.get('floorNo')?.touched && (this.roomForm.hasError('floorNo') || this.roomForm.get('floorNo')?.hasError('required'))">
+                Floor No value range should be in 1 - 99</mat-error>
 
             <mat-form-field class="mat-form-field">
                 <mat-label>Capacity</mat-label>
                 <input type="number" matInput placeholder="Capacity" formControlName="capacity">
-                <mat-error
-                    *ngIf="this.roomForm.get('capacity')?.touched && this.roomForm.get('capacity')?.hasError('required')">
-                    Capacity is mandatory</mat-error>
             </mat-form-field>
+            <mat-error *ngIf="this.roomForm.get('capacity')?.touched && (this.roomForm.hasError('capacity') || this.roomForm.get('capacity')?.hasError('required'))">
+                Capacity value range should be in 1 - 10</mat-error>
 
             <div class="button">
                 <a mat-button (click)="backToRooms()">Back to Rooms</a>

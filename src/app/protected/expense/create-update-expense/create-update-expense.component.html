@@ -36,10 +36,9 @@
             <mat-form-field class="mat-form-field">
                 <mat-label>Amount</mat-label>
                 <input type="number" matInput placeholder="Amount" formControlName="amount">
-                <mat-error
-                    *ngIf="this.expenseForm.get('amount')?.touched && this.expenseForm.get('amount')?.hasError('required')">
-                    Amount is mandatory. Amount value should be more than 0.</mat-error>
             </mat-form-field>
+            <mat-error *ngIf="this.expenseForm.get('amount')?.touched && (this.expenseForm.hasError('amount') || this.expenseForm.get('amount')?.hasError('required'))">
+                Amount value should be more than 1</mat-error>
 
             <div class="button">
                 <a mat-button (click)="backToExpenses()">Back to Expenses</a>

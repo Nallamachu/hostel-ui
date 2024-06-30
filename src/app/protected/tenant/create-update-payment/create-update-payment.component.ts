@@ -8,6 +8,7 @@ import { ProtectedService } from '../../protected.service';
 import { Response } from 'src/app/public/interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateAdapter } from '@angular/material/core';
+import { Validations } from '../../validations';
 
 @Component({
   selector: 'app-create-update-payment',
@@ -59,6 +60,9 @@ export class CreateUpdatePaymentComponent {
           [Validators.required]),
         tenantExpiryDate: new FormControl((this.tenantToModify != undefined)? this.tenantToModify.exitDate:null, 
           [Validators.required])
+      },
+      {
+        validators: Validations.validAmount
       }
     );
   }

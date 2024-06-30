@@ -1,5 +1,4 @@
 import { AbstractControl, ValidationErrors } from "@angular/forms";
-import { zip } from "rxjs";
 
 export class CustomValidators {
   static passwordsMatching(control: AbstractControl): ValidationErrors | null {

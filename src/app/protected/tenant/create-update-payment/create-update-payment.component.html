@@ -35,10 +35,9 @@
 
             <mat-form-field class="mat-form-field">
                 <input type="number" matInput placeholder="Enter Amount" formControlName="amount">
-                <mat-error
-                    *ngIf="this.paymentForm.get('amount')?.touched && this.paymentForm.get('amount')?.hasError('required')">
-                    Amount is required</mat-error>
             </mat-form-field>
+            <mat-error *ngIf="this.paymentForm.get('amount')?.touched && (this.paymentForm.hasError('amount') || this.paymentForm.get('amount')?.hasError('required'))">
+                Amount value should be more than 1</mat-error>
 
             <div class="button">
                 <a mat-button (click)="backToTenantDetails()">Tenant Details</a>

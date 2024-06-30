@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { ProtectedService } from '../../protected.service';
 import { Response } from 'src/app/public/interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Validations } from '../../validations';
 
 @Component({
   selector: 'app-create-update-hostel',
@@ -45,6 +46,9 @@ export class CreateUpdateHostelComponent {
         country: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.country : null, [Validators.required]),
         zipcode: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.address.zipcode : null, [Validators.required]),
         owner: new FormControl((this.hostelToModify != undefined) ? this.hostelToModify.owner : null)
+      },
+      {
+        validators: Validations.validZipcode
       }
     )
   }

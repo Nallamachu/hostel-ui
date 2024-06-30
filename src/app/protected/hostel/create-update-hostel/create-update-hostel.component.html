@@ -52,11 +52,10 @@
             </mat-form-field>
             <mat-form-field class="mat-form-field">
                 <mat-label>Pincode</mat-label>
-                <input type="text" matInput placeholder="Enter Pincode. Ex: 500001" formControlName="zipcode">
-                <mat-error
-                    *ngIf="this.createHostelForm.get('zipcode')?.touched && this.createHostelForm.get('zipcode')?.hasError('required')">
-                    Pincode is required</mat-error>
+                <input type="number" matInput placeholder="Enter Pincode. Ex: 500001" formControlName="zipcode">
             </mat-form-field>
+            <mat-error *ngIf="this.createHostelForm.get('zipcode')?.touched && (this.createHostelForm.hasError('zipcode') || this.createHostelForm.get('zipcode')?.hasError('required'))">
+                Pincode starts from 100000</mat-error>
 
             <div class="button">
                 <a mat-button (click)="backToHostels()">Back to Hostel</a>

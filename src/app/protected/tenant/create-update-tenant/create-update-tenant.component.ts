@@ -9,6 +9,7 @@ import { ProtectedService } from '../../protected.service';
 import { Response } from 'src/app/public/interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateAdapter } from '@angular/material/core';
+import { Validations } from '../../validations';
 
 @Component({
   selector: 'app-create-update-tenant',
@@ -84,6 +85,8 @@ export class CreateUpdateTenantComponent {
           [Validators.required]),
         zipcode: new FormControl((this.tenantToModify != undefined) ? this.tenantToModify.address.zipcode : null,
           [Validators.required])
+      },{
+        validators: Validations.validZipcode
       }
     );
   }
