@@ -29,11 +29,19 @@ export class CustomValidators {
       return { state: true };
     } else if(country === null || country === ""){
       return { country: true };
-    } else if(zipcode <= 0 || zipcode <10000) {
+    } else if(zipcode < 10000) {
       return { zipcode: true };
     } else {
       return null;
     }
   }
+
+  static validZipcode(control: AbstractControl): ValidationErrors | null {
+    const zipcode = control.get('zipcode')?.value;
+    if(zipcode <= 0 || zipcode <100000) {
+        return { zipcode: true };
+    }
+    return null;
+}
 
 }

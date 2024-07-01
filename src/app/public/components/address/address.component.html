@@ -26,10 +26,10 @@
                 Country is required</mat-error>
         </mat-form-field>
         <mat-form-field class="mat-form-field">
-            <input type="text" matInput placeholder="Pincode" formControlName="zipcode">
-            <mat-error
-                *ngIf="this.addressForm.get('zipcode')?.touched && this.addressForm.get('zipcode')?.hasError('required')">
-                Pincode is required</mat-error>
+            <input type="number" matInput placeholder="Pincode" formControlName="zipcode">
         </mat-form-field>
+        <mat-error
+        *ngIf="this.addressForm.get('zipcode')?.touched && (this.addressForm.hasError('zipcode') || this.addressForm.get('zipcode')?.hasError('required'))">
+                Pincode is required and starts from 100000</mat-error>
     </form>
 </mat-card-content>
